@@ -14,4 +14,4 @@ To be added:
 
 Future considerations:
 	→Possibility of (roughly) ordering images.
-	→Possibilit of promoting specific images (appear larger, appear in their own row etc)
+	→Possibility of promoting specific images (appear larger, appear in their own row etc)

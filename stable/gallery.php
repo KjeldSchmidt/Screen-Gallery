@@ -1,11 +1,11 @@
 <?php
 
-wp_register_style('screen-gallery-style', plugins_url('css/gallery-styles.css', __FILE__));
-wp_enqueue_style('screen-gallery-style');
+wp_register_style('screenGalleryStyle', plugins_url('css/galleryStyles.css', __FILE__));
+wp_enqueue_style('screenGalleryStyle');
 
-wp_register_script('screen-gallery-script', plugins_url('js/screen-gallery.min.js',  __FILE__));
-wp_enqueue_script('screen-gallery-script');
-wp_localize_script( 'screen-gallery-script', 'ajaxdata', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+wp_register_script('screenGalleryScript', plugins_url('js/screenGallery.min.js',  __FILE__));
+wp_enqueue_script('screenGalleryScript');
+wp_localize_script('screenGalleryScript', 'ajaxdata', array('ajaxurl' => admin_url('admin-ajax.php')));
 
 echo 	"<div class='hide'>
 			<span id='maxHeight'>". $screenOptions['max-height'] ."</span>
@@ -14,8 +14,8 @@ echo 	"<div class='hide'>
 
 ?>
 
-<div class="gallery-wrapper">
-	<div class="gallery-buffer">
+<div class="galleryWrapper">
+	<div class="galleryBuffer">
 
 	<?php include('getImages.php'); getImages(); ?>
 
@@ -23,5 +23,5 @@ echo 	"<div class='hide'>
 	<div class="gallery">
 	
 	</div>
-	<div class="gallery-end"></div>
+	<div class="galleryEnd"></div>
 </div>

@@ -1,7 +1,5 @@
 <?php
 
-//extract(shortcode_atts( array('tag' => null, 'open_search' = true, 'search' = true;), $atts ) );
-
 wp_register_style('screen-gallery-style', plugins_url('css/gallery-styles.css', __FILE__));
 wp_enqueue_style('screen-gallery-style');
 
@@ -16,9 +14,8 @@ echo 	"<div class='hide'>
 
 ?>
 
-<div class="gallery-wrapper">
-	<input type="text" id="gallery-tag-search">
-	<div class="gallery-buffer">
+<div class="galleryWrapper">
+	<div class="galleryBuffer">
 
 	<?php include('getImages.php'); getImages(); ?>
 
@@ -26,5 +23,5 @@ echo 	"<div class='hide'>
 	<div class="gallery">
 	
 	</div>
-	<div class="gallery-end"></div>
+	<div class="galleryEnd"></div>
 </div>

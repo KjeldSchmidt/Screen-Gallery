@@ -37,14 +37,16 @@ function getImages($tag=null, $offset=0) {
 	if ($attachments->have_posts()) {
 
 		while ($attachments->have_posts()) {
-
+		?>	<div class="galleryImageContainer"> <?php
 				$attachments->the_post();
 				the_attachment_link($post->ID, true, false);
-
+		?>	</div> <?php
 		}
 
 		wp_reset_postdata();
 
+	} else {
+		echo "empty";
 	}
 }
 

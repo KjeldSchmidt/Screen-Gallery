@@ -14,8 +14,8 @@ echo 	"<div class='hide'>
 
 ?>
 
-<div class="gallery-wrapper">
-	<div class="gallery-buffer">
+<div class="galleryWrapper">
+	<div class="galleryBuffer">
 
 	<?php include('getImages.php'); getImages(); ?>
 

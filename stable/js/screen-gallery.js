@@ -105,7 +105,7 @@ function row(images, fullWidth) {
 	return r;
 }
 
-//Offset explains, how many images are already loaded and gets send via Ajax for more.
+//Offset explains how many images are already loaded and gets send via AJAX for more.
 var galleryImages = [];
 var rows = [];
 var offset = 10;
@@ -133,7 +133,7 @@ function insertImageArray(array){
 
 
 //Recalculates all rows
-//Maybe add a different function that only recalculates the very last row and newly added ones, to improve performance on ajax
+//Maybe add a different function that only recalculates the very last row and newly added ones, to improve performance on AJAX-Calls.
 function placeInRows () {
 	//Resets the row-array
 	rows.forEach(function(row) {
@@ -167,7 +167,7 @@ function hasGalleryEnded(){
 	}
 }
 
-//Checks if the element is on screen. Actually, it checks if the element is on or above the screen. Add constreints later.
+//Checks if the element is on screen. Actually, it checks if the element is on or above the screen. Add constraints later.
 function isOnScreen(element) {
     var viewportHeight = jQuery(window).height(),
         scrollTop = jQuery(window).scrollTop(),

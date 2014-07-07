@@ -1,52 +1,120 @@
 //The gallery-object. Only one is ever needed at a time, so we load it into a variable directly.
 var ScreenGallery = {
 
-	//loads settings that might be changed
-	maxHeight: jQuery('#maxHeight').html(),
+	maxHeight: parseInt(jQuery('#maxHeight').html(), 10),
 	input: jQuery('#gallery-tag-search'),
-
-	//asigns the wrapper of the gallery for shorter use later
 	wrapper: jQuery('.galleryWrapper'),
+	galleryImages: [],
+	galleryRows: [],
+	offset: 10,
 	
 
 
 	init: function() {
 		this.positionWrapper();
 		this.bindAction();
+		this.insertImageArray(jQuery('.galleryBuffer .galleryImageContainer'));
+		this.hasGalleryEnded();
 	},
-
-
 
 	bindAction: function() {
 		//Fires when a tag to be filtered for is entered
 		this.input.on('change', function() {
-			ScreenGallery.filterTags();
+			this.filterTags();
 		});
 		
 		//Fires on resize and, well, resizes everything.
 		jQuery(window).resize(debouncer(function() {
-			placeInRows();
+			ScreenGallery.placeInRows();
 		}));
 
 		//Fires on scroll, checks to see if more images need loading
 		jQuery(window).scroll(debouncer(function(){
-			hasGalleryEnded();
+			ScreenGallery.hasGalleryEnded();
 		}));
 
 	},
-	//makes sure everything below the gallery gets pushed down enough, since the gallery has position: absolute
+
+	//Makes sure everything below the gallery gets pushed down enough, since the gallery has position: absolute
 	positionWrapper: function() {
 		this.wrapper.parent().height(this.wrapper.height()+50);
-	},
-
-	filterTags: function() {
-
-	},
+	},	
 
 	width: function() {
 		return this.wrapper.width();
-	}
+	},
 
+	insertImageArray: function(array){
+		array.each(function() {
+			var img = new galleryImage(jQuery(this));
+			ScreenGallery.galleryImages.push(img);
+		});
+
+		this.placeInRows();
+	},
+
+	//Checks if more images need loading
+	hasGalleryEnded: function(){
+		if (isOnScreen(jQuery('.galleryEnd'))) {
+			this.loadMoreImages();
+			//Only if images have been loaded, check wether you can STILL see the end of the gallery, and if yes, try to load more.
+			debouncer(function() { $(window).scroll(); }, 1000);
+		}
+	},
+
+	//Recalculates all rows. Maybe add a different function that only recalculates the very last row and newly added ones, to improve performance on AJAX-Calls.
+	placeInRows: function() {
+		this.galleryRows.forEach(function(row) {
+			row.remove();
+		});
+		this.galleryRows.length = 0;
+
+		var newRow = [];
+		var rowWidth = 0;
+		
+		//A row is complete once the images at target height are wider than the screen, so usually a small downsizing occurs.
+		this.galleryImages.forEach(function(img){
+			rowWidth += img.targetWidth;
+			newRow.push(img);
+			if (rowWidth >= ScreenGallery.width()) {
+				ScreenGallery.galleryRows.push(new row(newRow, rowWidth));
+				newRow = [];
+				rowWidth = 0;
+			}
+		});
+		//If, after going trough all images, a row isn't quite finished, it get's pushed now.
+		if (newRow.length) this.galleryRows.push(new row(newRow, rowWidth));
+		//Makes sure everythin is spaced properly
+		this.positionWrapper();
+	},
+
+	//Just ajax-loads more images. No big deal.
+	loadMoreImages: function () {
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxdata.ajaxurl,
+			data: {
+				action: 'get_images',
+				offset: this.offset
+			},
+			success: function(data){
+				if ((data == "empty")) {
+					ScreenGallery.loadMoreImages = undefined;
+					return;	
+				} 
+
+				//Gets the current amount of images so the ImageArray doesn't have to be completely newly created.
+				var sliceOffset = jQuery('.galleryBuffer .galleryImageContainer').length;
+				
+				jQuery('.galleryBuffer').append(data);
+				ScreenGallery.insertImageArray(jQuery('.galleryBuffer .galleryImageContainer').slice(sliceOffset));
+
+				ScreenGallery.offset += 10;	
+				//If no images are returned, it assumes no more images are available and will stop calling for more until the page is reloaded.
+				
+			}
+		}); 
+	}
 };
 
 function galleryImage(img) {
@@ -54,15 +122,9 @@ function galleryImage(img) {
 
 		image: img,
 		//Tells us the width it would have, if scaled to maxHeight (standard: 300)
-		targetWidth: (300 / img.find('img').attr("height") * img.find('img').attr("width")) + 20,
-		visible: true,		
+		targetWidth: (ScreenGallery.maxHeight / img.find('img').attr("height") * img.find('img').attr("width")) + 20,
 
-		show: function() {
-			jQuery(this.image).show();
-			this.visible = true;
-		},
-
-		//Scales the image by the height attribute rather than inline css. Good idea? I don't know.
+		//Scales the image by the height attribute rather than css. Good idea? I don't know.
 		height: function(height) {
 			jQuery(this).attr("height", height);
 		},
@@ -101,12 +163,12 @@ function row(images, fullWidth) {
 		}
 	};
 
-	//Sets the ID without # to insert it nicely into the dom, later we only need it for jQuery, so we add the #.	
-	r.id = 'row-'+rows.length;
+	//Sets the ID without # to insert it nicely into the DOM, later we only need it for jQuery, so we add the #.	
+	r.id = 'row-'+ScreenGallery.galleryRows.length;
 	jQuery('.gallery').append("<div id='"+r.id+"' class='galleryRow'></div>");
 	r.id = '#'+r.id;
 
-	//Appends the pictures to the row
+	
 	images.forEach(function(img) {
 		jQuery(r.id).append(jQuery(img.image)[0].outerHTML);
 	});
@@ -114,107 +176,26 @@ function row(images, fullWidth) {
 	//Applies the standard height 
 	jQuery(r.id).height(r.height);
 
-	//And then recalculates it... above line should propably be removed.
+	//And then recalculates it.
 	r.fit();
 
 	return r;
 }
 
 //Offset explains how many images are already loaded and gets send via AJAX for more.
-var galleryImages = [];
-var rows = [];
-var offset = 10;
+
 
 
 (function startUp() {
 	ScreenGallery.init();
-	//Inserts the original 10 images
-	insertImageArray(jQuery('.galleryBuffer .galleryImageContainer'));
-	//Checks wether they fill the screen, loads more if not
-	hasGalleryEnded();
 }) ();
 
 
-function insertImageArray(array){
-	//Adds the images to the existing array of images
-	array.each(function() {
-		var img = new galleryImage(jQuery(this));
-		galleryImages.push(img);
-	});
-
-	//And recalculates all rows.
-	placeInRows();
-}
 
 
-//Recalculates all rows
-//Maybe add a different function that only recalculates the very last row and newly added ones, to improve performance on AJAX-Calls.
-function placeInRows () {
-	//Resets the row-array
-	rows.forEach(function(row) {
-		row.remove();
-	});
-	rows.length = 0;
-
-	var newRow = [];
-	var rowWidth = 0;
-	
-	//A row is complete once the images at target height are wider than the screen, so usually a small downsizing occurs.
-	galleryImages.forEach(function(img){
-		rowWidth += img.targetWidth;
-		newRow.push(img);
-		if (rowWidth >= ScreenGallery.width()) {
-			rows.push(new row(newRow, rowWidth));
-			newRow = [];
-			rowWidth = 0;
-		}
-	});
-	//If, after going trough all images, a row isn't quite finished, it get's pushed now.
-	if (newRow.length) rows.push(new row(newRow, rowWidth));
-	//Makes sure everythin is spaced properly
-	ScreenGallery.positionWrapper();
-}
-
-//Checks if more images need loading
-function hasGalleryEnded(){
-	if (isOnScreen(jQuery('.galleryEnd'))) {
-		loadMoreImages();
-		//Only if images have been loaded, check wether you can STILL see the end of the gallery, and if yes, try to load more.
-		debouncer(function() { $(window).scroll(); }, 1000);
-	}
-}
-
-//Checks if the element is on screen. Actually, it checks if the element is on or above the screen. Add constraints later.
-function isOnScreen(element) {
-    var viewportHeight = jQuery(window).height(),
-        scrollTop = jQuery(window).scrollTop(),
-        y = jQuery(element).offset().top;
-
-    return (y < (viewportHeight + scrollTop+300));
-}
-
-//Just ajax-loads more images. No big deal.
-function loadMoreImages() {
-	jQuery.ajax({
-		type: 'POST',
-		url: ajaxdata.ajaxurl,
-		data: {
-			action: 'get_images',
-			offset: offset
-		},
-		success: function(data){
-			offset += 10;
-			//Gets the current amount of images so the ImageArray doesn't have to be completely newly created.
-			var sliceOffset = jQuery('.galleryBuffer .galleryImageContainer').length;
-			//Appends the new image, adds them to the output
-			jQuery('.galleryBuffer').append(data);
-			insertImageArray(jQuery('.galleryBuffer .galleryImageContainer').slice(sliceOffset));
-			//If no images are returned, it assumes no more images are available and will stop calling for more until the page is reloaded.
-			if ((data == "empty")) loadMoreImages = undefined;
-		}
-	}); 
-}
-
+//							//
+//     Generic Functions	//
+//							//
 
 //Debouncer functions add a delay between an event and a reaction, so scaling and scrolling don't evoke a function dozens of times.
 function debouncer(func, timeout) {
@@ -226,4 +207,13 @@ function debouncer(func, timeout) {
 			func.apply( scope , Array.prototype.slice.call( args ) );
 		} , timeout );
 	};
+}
+
+//Checks if the element is on screen. Actually, it checks if the element is on or above the screen.
+function isOnScreen(element) {
+	var viewportHeight = jQuery(window).height(),
+		scrollTop = jQuery(window).scrollTop(),
+		y = jQuery(element).offset().top;
+
+	return (y < (viewportHeight + scrollTop+300));
 }

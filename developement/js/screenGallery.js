@@ -29,10 +29,9 @@ var ScreenGallery = {
 		}));
 
 		//Fires on scroll, checks to see if more images need loading
-		jQuery(window).scroll(debouncer(function(){
+		jQuery(window).on('scroll', debouncer(function() {
 			ScreenGallery.hasGalleryEnded();
 		}));
-
 	},
 
 	//Makes sure everything below the gallery gets pushed down enough, since the gallery has position: absolute
@@ -56,9 +55,7 @@ var ScreenGallery = {
 	//Checks if more images need loading
 	hasGalleryEnded: function(){
 		if (isOnScreen(jQuery('.galleryEnd'))) {
-			this.loadMoreImages();
-			//Only if images have been loaded, check wether you can STILL see the end of the gallery, and if yes, try to load more.
-			debouncer(function() { $(window).scroll(); }, 1000);
+			ScreenGallery.loadMoreImages();
 		}
 	},
 
@@ -99,7 +96,7 @@ var ScreenGallery = {
 			},
 			success: function(data){
 				if ((data == "empty")) {
-					ScreenGallery.loadMoreImages = undefined;
+					jQuery(window).off('click', ScreenGallery.hasGalleryEnded)
 					return;	
 				} 
 
@@ -173,17 +170,12 @@ function row(images, fullWidth) {
 		jQuery(r.id).append(jQuery(img.image)[0].outerHTML);
 	});
 
-	//Applies the standard height 
+	//Applies the standard height and then recalculates it.
 	jQuery(r.id).height(r.height);
-
-	//And then recalculates it.
 	r.fit();
 
 	return r;
 }
-
-//Offset explains how many images are already loaded and gets send via AJAX for more.
-
 
 
 (function startUp() {

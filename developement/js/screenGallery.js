@@ -29,7 +29,7 @@ var ScreenGallery = {
 		}));
 
 		//Fires on scroll, checks to see if more images need loading
-		jQuery(window).on('scroll', debouncer(function() {
+		jQuery(window).on('scroll.loadImages', debouncer(function() {
 			ScreenGallery.hasGalleryEnded();
 		}));
 	},
@@ -53,11 +53,13 @@ var ScreenGallery = {
 	},
 
 	//Checks if more images need loading
-	hasGalleryEnded: function(){
+	hasGalleryEnded: function() {
+		console.log("I'm called, you know?");
 		if (isOnScreen(jQuery('.galleryEnd'))) {
 			ScreenGallery.loadMoreImages();
 		}
 	},
+		
 
 	//Recalculates all rows. Maybe add a different function that only recalculates the very last row and newly added ones, to improve performance on AJAX-Calls.
 	placeInRows: function() {
@@ -94,9 +96,11 @@ var ScreenGallery = {
 				action: 'get_images',
 				offset: this.offset
 			},
+
 			success: function(data){
 				if ((data == "empty")) {
-					jQuery(window).off('click', ScreenGallery.hasGalleryEnded)
+					jQuery(window).off('.loadImages');
+
 					return;	
 				} 
 

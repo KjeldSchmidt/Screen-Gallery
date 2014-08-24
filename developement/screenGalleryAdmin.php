@@ -22,3 +22,10 @@ $tabs = new AdminTabs($tabs);
 		<?php $tabs->assignContent(); ?>
 	</div>
 </div>
+
+<?php
+
+	wp_register_style('screenGalleryAdminStyle', plugins_url('css/galleryAdminStyles.css', __FILE__));
+	wp_enqueue_style('screenGalleryAdminStyle');
+
+?>

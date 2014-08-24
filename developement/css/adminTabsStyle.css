@@ -1,0 +1,19 @@
+.navTabs {
+	display: inline-block;
+	padding: 10px;
+	border: 1px solid #ccc;	border-radius: 5px 5px 0 0;
+	font-size: 1.4em;
+	background: none repeat scroll 0% 0% #fff;
+	float: left;
+	position: relative;
+	top: 2px;
+}
+
+.navTabs.active {
+	border-bottom: 0px;
+}
+
+.navTabs a {
+	text-decoration: none;
+	color: #000;
+}

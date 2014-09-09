@@ -1,4 +1,4 @@
-.navTabs {
+.adminTabs {
 	display: inline-block;
 	padding: 10px;
 	border: 1px solid #ccc;	border-radius: 5px 5px 0 0;
@@ -9,11 +9,11 @@
 	top: 2px;
 }
 
-.navTabs.active {
+.adminTabs.active {
 	border-bottom: 0px;
 }
 
-.navTabs a {
+.adminTabs a {
 	text-decoration: none;
 	color: #000;
 }

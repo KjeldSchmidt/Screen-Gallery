@@ -16,7 +16,7 @@ class AdminTabs {
 			}
 		}
 
-		if (!isset($this->currentTab) $this->currentTab = $this->tabs[0];
+		if (!isset($this->currentTab)) $this->currentTab = $this->tabs[0];
 	}
 
 	function buildTabs() {
@@ -39,7 +39,7 @@ class AdminTabs {
 		$url = "adminTabs/" . $this->currentTab->file;
 
 		if (is_file($url)) include $url;
-		else echo $file . " could not be included. Please check file name, location and adminTabs configuration."
+		else echo $file . " could not be included. Please check file name, location and adminTabs configuration.";
 	}
 
 }

@@ -3,7 +3,6 @@
 tables_install();
 
 
-
 function tables_install() {
 	global $wpdb;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -16,9 +15,9 @@ function tables_install() {
 	if ( ! empty( $wpdb->charset ) ) { $charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}"; }
 	if ( ! empty( $wpdb->collate ) ) { $charset_collate .= " COLLATE {$wpdb->collate}"; }
 
-	?> Attempting to install_tables . . . <?php
 
-	#Table containing gallery info
+
+	# Table containing gallery info
 	$table_name = $tables_galleries_name;
 	
 	$sql = "CREATE TABLE $table_name (
@@ -46,20 +45,19 @@ function tables_install() {
 	dbDelta( $sql );
 }
 
-function jal_install_data() {
-	global $wpdb;
-	
-	$welcome_name = 'Mr. WordPres';
-	$welcome_text = 'Congratulations, you just completed the installation!';
-	
-	$table_name = $wpdb->prefix . 'liveshoutbox';
-	
-	$wpdb->insert( 
-		$table_name, 
-		array( 
-			'time' => current_time( 'mysql' ), 
-			'name' => $welcome_name, 
-			'text' => $welcome_text, 
-		) 
-	);
-}
+
+?>
+
+<button id="addGalleryButton" class="button button-primary button-large">Add Gallery</button>
+
+
+<div id="addGallery">
+	<form action="" method="post">
+		<input type="text" placeholder="Name" name="name">
+		<textarea name="text" id="" cols="30" rows="5" placeholder="Description"></textarea>
+		<span>
+			<button type="submit" class="button button-primary button-large">Save</button>
+			<button class="button button-secondary button-large">Cancel</button>
+		</span>
+	</form>
+</div>

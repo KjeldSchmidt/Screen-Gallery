@@ -36,7 +36,13 @@ function screenGalleryAdmin(){
 
 
 
-//Tags are used for dynamic filtering.
+
+
+//´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
+//~~~~ Custom post and tag ~~~~//
+//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
+
+
 function add_gallery_tags_taxonomy() {
 	$labels = array(
 		'name'				=> 'Gallery Tags',
@@ -88,30 +94,79 @@ function gallery_post_type_init() {
 
 
 
+
+
+//´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
+//~~~~~~~~~ AJAX calls ~~~~~~~~//
+//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
+
+
 function getImageFeed() {
 	include('getImages.php');
 	$tag = (isset($_POST['tag'])) ? $_POST['tag'] : null;
 	$offset = (isset($_POST['offset'])) ? $_POST['offset'] : 0;
 	getImages($tag, $offset);
-	die(); //Seems unneccessary, check later.
+	die();
+}
+
+function add_gallery() {
+	global $wpdb;
+	
+
+	$name = $_POST['name'];
+	$slug = sanitize_title($_POST['name']);
+	$text = $_POST['text'];
+	
+	$table_name = $wpdb->prefix . 'screengallery_galleries';
+	
+	$wpdb->insert( 
+		$table_name, 
+		array( 
+			'name' => $name,
+			'slug' => $slug,
+			'text' => $text,
+		) 
+	);
+
+	echo $name . "<br>";
+	echo $slug . "<br>";
+	echo $text . "<br>";
+
+	die();
 }
 
 
 
-//~~~~~ Actions and Hooks ~~~~~//
 
-add_shortcode('screengallery', 'gallery');  
+
+//´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
+//~~~~~ Actions and Hooks ~~~~~//
+//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
+
+#Basic setup
+
+add_action('admin_menu', 'screenGalleryAdminActions');
 
 add_action('wp_ajax_my_ajax', 'my_ajax');
-function my_ajax() {die("Hello World");} //Required by Wordpress
+function my_ajax() {die("Hello World");} 
+
+add_shortcode('screengallery', 'gallery');  
+add_action('init', 'add_gallery_tags_taxonomy');
+add_action('init', 'gallery_post_type_init');
+
+
+
+# Frontend AJAX
 
 add_action('wp_ajax_get_images', 'getImageFeed');
 add_action('wp_ajax_nopriv_get_images', 'getImageFeed');
 
-add_action('init', 'add_gallery_tags_taxonomy');
-add_action('init', 'gallery_post_type_init');
 
-add_action('admin_menu', 'screenGalleryAdminActions');
+
+# Backend AJAX
+
+add_action('wp_ajax_add_gallery', 'add_gallery');
+
 
 
 

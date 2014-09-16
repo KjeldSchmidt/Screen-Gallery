@@ -1,1 +1,23 @@
-.adminArea{font-size:1em;text-align:center;margin:10px}.adminContent{background:none repeat scroll 0% 0% #fff;padding:16px;clear:left;border:1px solid #ccc}.galleryPreview{height:150px;padding:5px;text-align:left}
+.adminArea {
+  font-size: 1em;
+  text-align: center;
+  margin: 10px; }
+
+.adminContent {
+  background: none repeat scroll 0% 0% #fff;
+  padding: 16px;
+  clear: left;
+  border: 1px solid #ccc; }
+
+.galleryPreview {
+  height: 150px;
+  padding: 5px;
+  text-align: left; }
+
+#addGallery {
+  display: none; }
+
+#addGallery form > * {
+  display: block;
+  width: 50%;
+  margin: 10px auto; }

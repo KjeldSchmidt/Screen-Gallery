@@ -16,3 +16,13 @@
 	padding: 5px;
 	text-align: left;
 }
+
+#addGallery {
+	display: none;
+}
+
+#addGallery form > * {
+	display: block;
+	width: 50%;
+	margin: 10px auto;
+}

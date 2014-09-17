@@ -1,6 +1,5 @@
 .adminArea {
 	font-size: 1em;
-	text-align: center;
 	margin: 10px;
 }
 
@@ -25,4 +24,15 @@
 	display: block;
 	width: 50%;
 	margin: 10px auto;
+}
+
+.imageEditor {
+
+	margin: 10px;
+	clear: both;
+
+	img {
+		float: left;
+		margin: 10px;
+	}
 }

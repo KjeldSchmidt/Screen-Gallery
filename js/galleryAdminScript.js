@@ -6,7 +6,7 @@ var newGalleryWidget = {
 
 	init: function() {
 		this.toggleButton.on('click', function() {
-			newGalleryWidget.newGallery.toggle();
+			newGalleryWidget.newGallery.slideToggle();
 		});
 		this.sendButton.on('click', function(e) {
 			newGalleryWidget.send(e);
@@ -25,7 +25,7 @@ var newGalleryWidget = {
 			},
 
 			success: function(data){
-				console.dir(data);
+				console.dir(jQuery.parseJSON(data));
 			}
 		}); 
 

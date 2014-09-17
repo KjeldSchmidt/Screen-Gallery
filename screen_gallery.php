@@ -113,24 +113,22 @@ function add_gallery() {
 	global $wpdb;
 	
 
-	$name = $_POST['name'];
-	$slug = sanitize_title($_POST['name']);
-	$text = $_POST['text'];
+	$newGallery['name'] = $_POST['name'];
+	$newGallery['slug'] = sanitize_title($_POST['name']);
+	$newGallery['text'] = $_POST['text'];
 	
 	$table_name = $wpdb->prefix . 'screengallery_galleries';
 	
 	$wpdb->insert( 
 		$table_name, 
 		array( 
-			'name' => $name,
-			'slug' => $slug,
-			'text' => $text,
+			'name' => $newGallery['name'],
+			'slug' => $newGallery['slug'],
+			'text' => $newGallery['text'],
 		) 
 	);
 
-	echo $name . "<br>";
-	echo $slug . "<br>";
-	echo $text . "<br>";
+	echo json_encode($newGallery);
 
 	die();
 }

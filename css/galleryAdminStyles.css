@@ -16,7 +16,7 @@
 #addGallery {
   display: none; }
 
-#addGallery form > * {
+#addGallery > * {
   display: block;
   width: 50%;
   margin: 10px auto; }

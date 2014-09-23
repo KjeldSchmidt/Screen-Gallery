@@ -2,14 +2,12 @@
 
 
 <div id="addGallery">
-	<form action="" method="post">
-		<input type="text" placeholder="Name" name="name">
-		<textarea name="description" id="" cols="30" rows="5" placeholder="Description"></textarea>
-		<span>
-			<button type="submit" class="button button-primary button-large">Save</button>
-			<button class="button button-secondary button-large">Cancel</button>
-		</span>
-	</form>
+	<input type="text" placeholder="Name" name="name">
+	<textarea name="description" cols="30" rows="5" placeholder="Description"></textarea>
+	<span>
+		<button type="submit" class="button button-primary button-large">Save</button>
+		<button class="button button-secondary button-large" name="cancel">Cancel</button>
+	</span>
 </div>
 
 <?php

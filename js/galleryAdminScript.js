@@ -1,15 +1,29 @@
 var newGalleryWidget = {
 
-	toggleButton: 	jQuery('#addGalleryButton'),
-	newGallery:		jQuery('#addGallery'),
-	sendButton: 	jQuery('#addGallery form [type=submit]'),
+	newGallery: jQuery('#addGallery'),
+	newGalleryName: jQuery('#addGallery [name=name]'),
+	newGalleryDescription: jQuery('#addGallery [name=description]'),
+
+	toggleButton: jQuery('#addGalleryButton'),
+	sendButton: jQuery('#addGallery [type=submit]'),
+	cancelButton: jQuery('#addGallery [name=cancel]'),
+
+	
+	
 
 	init: function() {
 		this.toggleButton.on('click', function() {
 			newGalleryWidget.newGallery.slideToggle();
 		});
+
 		this.sendButton.on('click', function(e) {
 			newGalleryWidget.send(e);
+		});
+
+		this.cancelButton.on('click', function() {
+			newGalleryWidget.newGalleryName.val("");
+			newGalleryWidget.newGalleryDescription.val("");
+			newGalleryWidget.newGallery.slideToggle();
 		});
 	},
 
@@ -20,8 +34,8 @@ var newGalleryWidget = {
 			url: ajaxdata.ajaxurl,
 			data: {
 				action: 'add_gallery',
-				name: this.newGallery.find('[name=name]').val(),
-				description: this.newGallery.find('[name=description]').val()
+				name: this.newGalleryName.val(),
+				description: this.newGalleryDescription.val()
 			},
 
 			success: function(data){

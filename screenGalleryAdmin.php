@@ -1,11 +1,12 @@
 <?php
 
 include 'class.adminTab.php';
+include 'adminTabs/classes.backend.php';
 
 $tabs = array(
 	'Overview',
 	'Galleries',
-	'Tags',
+	'Images',
 	'Style'
 );
 

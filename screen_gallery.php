@@ -9,6 +9,8 @@ Author URL: http://www.superfluidmercury.com/
 */
 
 define('AJAXURL', WP_PLUGIN_URL."/".dirname( plugin_basename( __FILE__ ) ) );
+define('GALLERY_TABLE', $wpdb->prefix . 'screengallery_galleries');
+define('RELATION_TABLE', $wpdb->prefix . 'screengallery_relation');
 
 
 $options = array(
@@ -115,7 +117,7 @@ function add_gallery() {
 
 	$newGallery['name'] = $_POST['name'];
 	$newGallery['slug'] = sanitize_title($_POST['name']);
-	$newGallery['text'] = $_POST['text'];
+	$newGallery['description'] = $_POST['description'];
 	
 	$table_name = $wpdb->prefix . 'screengallery_galleries';
 	
@@ -124,11 +126,14 @@ function add_gallery() {
 		array( 
 			'name' => $newGallery['name'],
 			'slug' => $newGallery['slug'],
-			'text' => $newGallery['text'],
+			'description' => $newGallery['description'],
 		) 
 	);
 
-	echo json_encode($newGallery);
+	$newGallery['id'] = $wpdb->insert_id;
+	include_once('adminTabs/classes.backend.php');
+	$newGallery = new Gallery($newGallery);
+	echo $newGallery->build_backend();
 
 	die();
 }

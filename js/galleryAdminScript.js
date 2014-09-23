@@ -20,12 +20,12 @@ var newGalleryWidget = {
 			url: ajaxdata.ajaxurl,
 			data: {
 				action: 'add_gallery',
-				name: 	this.newGallery.find('[name=name]').val(),
-				text: 	this.newGallery.find('[name=text]').val()
+				name: this.newGallery.find('[name=name]').val(),
+				description: this.newGallery.find('[name=description]').val()
 			},
 
 			success: function(data){
-				console.dir(jQuery.parseJSON(data));
+				jQuery('.galleryEditors').prepend(data);
 			}
 		}); 
 

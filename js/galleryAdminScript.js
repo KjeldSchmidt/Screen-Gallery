@@ -44,25 +44,30 @@ var newGalleryWidget = {
 		}); 
 
 	}
-}
+};
 
 var editGalleryWidget = {
+
+
 	widget: jQuery('#editGallery'),
 	nameInput: jQuery('#editGallery [name=name]'),
 	descriptionInput: jQuery('#editGallery [name=description]'),
+
 
 	saveButton: jQuery('#editGallery [type=submit]'),
 	cancelButton: jQuery('#editGallery [name=cancel]'),
 	deleteButton: jQuery('#editGallery [name=delete]'),
 
 	
-
 	galleryData: {
 		id: null,
 		title: null,
 		description: null,
 		title_image_url: null
 	},
+
+
+
 
 	init: function() {
 		jQuery('.galleryEditor [name=edit]').on('click', function() {
@@ -76,7 +81,7 @@ var editGalleryWidget = {
 		});
 
 		this.saveButton.on('click', function() {
-
+			editGalleryWidget.save();
 		});
 
 		this.cancelButton.on('click', function() {
@@ -84,19 +89,25 @@ var editGalleryWidget = {
 		});
 
 		this.deleteButton.on('click', function() {
-		
+			editGalleryWidget.deleteGallery();
 		});
 	},
+
+
+
 
 	activate: function() {
 		this.widget.show(400);
 		this.nameInput.val( this.galleryData.title);
 		this.descriptionInput.val ( this.galleryData.description );
+		window.scrollTo(0, 0);
 	},
+
 
 	save: function() {
 
 	},
+
 
 	cancel: function() {
 		jQuery.each(this.galleryData, function(key, value) {
@@ -106,8 +117,34 @@ var editGalleryWidget = {
 		this.widget.hide(400);
 		this.nameInput.val("");
 		this.descriptionInput.val("");
+	},
+
+
+	deleteGallery: function() {
+	
+		if ( confirm( "Are you sure you want to delete the gallery? You will not be able to restore it." ) ) {
+
+			jQuery.ajax({
+
+				type: 'POST',
+				url: ajaxdata.ajaxurl,
+
+				data: {
+					action: 'deleteGallery',
+					id: this.galleryData.id
+				},
+				
+
+				success: function(data) {
+					jQuery( '[data-id=' + editGalleryWidget.galleryData.id + ']').hide(400);
+					editGalleryWidget.cancel();
+				}
+
+			});
+
+		}
 	}
-}
+};
 
 newGalleryWidget.init();
 editGalleryWidget.init();

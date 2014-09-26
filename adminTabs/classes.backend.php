@@ -33,17 +33,24 @@ class Gallery {
 	private $description;
 	private $title_image_url;
 
-	function __construct($gallery_object) {
-		if (is_object($gallery_object)) {
+	function __construct( $gallery_object ) {
+		
+		if ( is_object( $gallery_object ) ) {
+
 			$this->id = $gallery_object->id;
 			$this->slug = $gallery_object->slug;
 			$this->title = $gallery_object->name;
 			$this->description = $gallery_object->description;
-		} else if(is_array($gallery_object)) {
+			
+		} 
+		
+		else if ( is_array( $gallery_object ) ) {
+
 			$this->id = $gallery_object['id'];
 			$this->slug = $gallery_object['slug'];
 			$this->title = $gallery_object['name'];
 			$this->description = $gallery_object['description'];
+
 		}
 		
 	}

@@ -103,6 +103,11 @@ function gallery_post_type_init() {
 //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
 
 
+
+#
+#		Frontend
+#
+
 function getImageFeed() {
 	include('getImages.php');
 	$tag = (isset($_POST['tag'])) ? $_POST['tag'] : null;
@@ -110,6 +115,14 @@ function getImageFeed() {
 	getImages($tag, $offset);
 	die();
 }
+
+
+
+
+
+#
+#		Backend
+#
 
 function add_gallery() {
 	global $wpdb;
@@ -140,7 +153,15 @@ function add_gallery() {
 
 
 
+function deleteGallery() {
+	global $wpdb;
 
+
+
+	$wpdb->delete(GALLERY_TABLE, array('id' => $_POST['id']));
+
+	die();
+}
 
 //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
 //~~~~~ Actions and Hooks ~~~~~//
@@ -169,6 +190,7 @@ add_action('wp_ajax_nopriv_get_images', 'getImageFeed');
 # Backend AJAX
 
 add_action('wp_ajax_add_gallery', 'add_gallery');
+add_action('wp_ajax_deleteGallery', 'deleteGallery');
 
 
 

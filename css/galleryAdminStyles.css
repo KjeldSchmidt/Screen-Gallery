@@ -13,10 +13,10 @@
   padding: 5px;
   text-align: left; }
 
-#addGallery {
+.hiddenWidget {
   display: none; }
 
-#addGallery > * {
+.editingWidget > * {
   display: block;
   width: 50%;
   margin: 10px auto; }

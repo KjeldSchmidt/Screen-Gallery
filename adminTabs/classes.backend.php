@@ -49,7 +49,7 @@ class Gallery {
 	}
 
 	function build_backend() { ?>
-		<div id="galleryEditor<?php echo $this->id; ?>" class="galleryEditor">
+		<div id="galleryEditor" class="galleryEditor" data-id="<?php echo $this->id; ?>">
 			<img src="<?php echo $this->title_image_url ?>" alt="" height="200">
 			<h3>
 				<?php echo $this->title ?>
@@ -57,9 +57,9 @@ class Gallery {
 			<p>
 				<?php echo $this->description ?>
 			</p>
-			<button class="button button-primary button-large">Get Shortocde</button>
-			<button class="button button-secondary button-large">View all images</button>
-			<button class="button button-secondary button-large">Edit</button>
+			<button class="button button-primary button-large" name="shortcode">Get Shortocde</button>
+			<button class="button button-secondary button-large" name="images">View all images</button>
+			<button class="button button-secondary button-large" name="edit">Edit</button>
 		</div>
 	<?php }
 }

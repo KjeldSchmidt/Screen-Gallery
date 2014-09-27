@@ -158,7 +158,8 @@ function deleteGallery() {
 
 
 
-	$wpdb->delete(GALLERY_TABLE, array('id' => $_POST['id']));
+	$wpdb->delete( GALLERY_TABLE, array( 'id' => $_POST['id'] ) );
+	$wpdb->delete( RELATION_TABLE, array( 'galleryid' => $_POST['id'] ) );
 
 	die();
 }

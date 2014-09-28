@@ -33,7 +33,7 @@ var newGalleryWidget = {
 			type: 'POST',
 			url: ajaxdata.ajaxurl,
 			data: {
-				action: 'add_gallery',
+				action: 'addGallery',
 				name: this.newGalleryName.val(),
 				description: this.newGalleryDescription.val()
 			},
@@ -45,6 +45,11 @@ var newGalleryWidget = {
 
 	}
 };
+
+
+
+
+
 
 var editGalleryWidget = {
 
@@ -65,7 +70,6 @@ var editGalleryWidget = {
 		description: null,
 		title_image_url: null
 	},
-
 
 
 
@@ -95,7 +99,6 @@ var editGalleryWidget = {
 
 
 
-
 	activate: function() {
 		this.widget.show(400);
 		this.nameInput.val( this.galleryData.title);
@@ -104,9 +107,28 @@ var editGalleryWidget = {
 	},
 
 
-	save: function() {
 
+	save: function() {
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxdata.ajaxurl,
+			data: {
+				action: 'updateGallery',
+				id: this.galleryData.id,
+				name: this.nameInput.val(),
+				description: this.descriptionInput.val()
+			},
+			
+			success: function(data){
+				var changedGallery = jQuery('.galleryEditor[data-id=' + editGalleryWidget.galleryData.id + ']');
+				changedGallery.find('h3').html(editGalleryWidget.nameInput.val());
+				changedGallery.find('p').html(editGalleryWidget.descriptionInput.val());
+
+				editGalleryWidget.cancel();
+			}
+		}); 
 	},
+
 
 
 	cancel: function() {
@@ -118,6 +140,7 @@ var editGalleryWidget = {
 		this.nameInput.val("");
 		this.descriptionInput.val("");
 	},
+
 
 
 	deleteGallery: function() {

@@ -124,7 +124,7 @@ function getImageFeed() {
 #		Backend
 #
 
-function add_gallery() {
+function addGallery() {
 	global $wpdb;
 	
 
@@ -144,8 +144,8 @@ function add_gallery() {
 	);
 
 	$newGallery['id'] = $wpdb->insert_id;
-	include_once('adminTabs/classes.backend.php');
-	$newGallery = new Gallery($newGallery);
+	include_once( 'adminTabs/classes.backend.php' );
+	$newGallery = new Gallery( $newGallery );
 	echo $newGallery->build_backend();
 
 	die();
@@ -160,6 +160,25 @@ function deleteGallery() {
 
 	$wpdb->delete( GALLERY_TABLE, array( 'id' => $_POST['id'] ) );
 	$wpdb->delete( RELATION_TABLE, array( 'galleryid' => $_POST['id'] ) );
+
+	die();
+}
+
+
+
+function updateGallery() {
+	global $wpdb;
+
+
+
+	$wpdb->update( 
+		GALLERY_TABLE,
+		array( 
+			'name' => $_POST['name'],
+			'description' => $_POST['description']
+		),
+		array( 'id' => $_POST['id'] )
+	);
 
 	die();
 }
@@ -190,8 +209,9 @@ add_action('wp_ajax_nopriv_get_images', 'getImageFeed');
 
 # Backend AJAX
 
-add_action('wp_ajax_add_gallery', 'add_gallery');
+add_action('wp_ajax_addGallery', 'addGallery');
 add_action('wp_ajax_deleteGallery', 'deleteGallery');
+add_action('wp_ajax_updateGallery', 'updateGallery');
 
 
 

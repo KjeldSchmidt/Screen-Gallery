@@ -1,6 +1,31 @@
 <?php
 
-class Image {
+class GalleryBackendController {
+
+	
+	function __construct( ) {
+		
+	}
+
+
+	public static function getImageAttachments() {
+		global $wpdb;
+
+		$images = $wpdb->get_results(
+			"
+			SELECT ID, post_content, post_title, guid AS url
+			FROM $wpdb->posts
+			WHERE post_mime_type LIKE 'image%'"
+		);
+
+		foreach ( $images as $image ) {
+			$image = new GalleryImage($image);
+			$image->build_backend();
+		}
+	}
+}
+
+class GalleryImage {
 
 	private $id;
 	private $url;
@@ -16,10 +41,10 @@ class Image {
 
 	function build_backend() { ?>
 		<div class="imageEditor">
-			<img src="<?php echo $this->url ?>" alt="" height="200">
+			<img src="<?php echo $this->url ?>" alt="" width="200">
 			<h3><?php echo $this->title ?></h3>
 			<p><?php echo $this->description ?></p>
-			<button class="button button-primary button-large">Add to galleries</button>
+			<button class="button button-primary button-large">Add to gallery</button>
 			<button class="button button-secondary button-large">Edit</button>
 		</div>
 	<?php }
@@ -27,11 +52,17 @@ class Image {
 
 class Gallery {
 
+
+
 	private $id;
 	private $slug;
 	private $title;
 	private $description;
 	private $title_image_url;
+	private $hasImages = false;
+
+
+
 
 	function __construct( $gallery_object ) {
 		
@@ -55,8 +86,9 @@ class Gallery {
 		
 	}
 
+
 	function build_backend() { ?>
-		<div id="galleryEditor" class="galleryEditor" data-id="<?php echo $this->id; ?>">
+		<div class="galleryEditor" data-id="<?php echo $this->id; ?>">
 			<img src="<?php echo $this->title_image_url ?>" alt="" height="200">
 			<h3>
 				<?php echo $this->title ?>
@@ -69,6 +101,30 @@ class Gallery {
 			<button class="button button-secondary button-large" name="edit">Edit</button>
 		</div>
 	<?php }
+
+
+	function getImages() {
+		global $wpdb;
+
+		$table_name = RELATION_TABLE;
+		$galleries = $wpdb->get_results(
+			"SELECT ID, guid as URL
+			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.id
+			WHERE galleryid = $this->id
+			"
+		);
+
+		if (!is_null($galleries)) {
+			foreach ($galleries as $key => $value) {
+				
+			}
+		} else { ?>
+			<div class="galleryImageSelector">
+				<?php GalleryBackendController::getImageAttachments(); ?>
+			</div>
+		}
+
+	}
 }
 
 ?>

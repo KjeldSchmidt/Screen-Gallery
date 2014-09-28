@@ -1,31 +1,34 @@
-var newGalleryWidget = {
+var NewGalleryWidget = {
 
 	newGallery: jQuery('#addGallery'),
 	newGalleryName: jQuery('#addGallery [name=name]'),
 	newGalleryDescription: jQuery('#addGallery [name=description]'),
 
-	toggleButton: jQuery('#addGalleryButton'),
-	sendButton: jQuery('#addGallery [type=submit]'),
-	cancelButton: jQuery('#addGallery [name=cancel]'),
+	
+	
 
-	
-	
 
 	init: function() {
-		this.toggleButton.on('click', function() {
-			newGalleryWidget.newGallery.slideToggle();
+		this.bindActions();
+	},
+
+
+
+	bindActions: function() {
+		jQuery('#addGalleryButton').on('click', function() {
+			NewGalleryWidget.newGallery.slideToggle();
 		});
 
-		this.sendButton.on('click', function(e) {
-			newGalleryWidget.send(e);
+		jQuery('#addGallery [type=submit]').on('click', function(e) {
+			NewGalleryWidget.send(e);
 		});
 
-		this.cancelButton.on('click', function() {
-			newGalleryWidget.newGalleryName.val("");
-			newGalleryWidget.newGalleryDescription.val("");
-			newGalleryWidget.newGallery.slideToggle();
+		jQuery('#addGallery [name=cancel]').on('click', function() {
+			NewGalleryWidget.cancel();
 		});
 	},
+
+
 
 	send: function(e) {
 		e.preventDefault();
@@ -40,9 +43,18 @@ var newGalleryWidget = {
 			
 			success: function(data){
 				jQuery('.galleryEditors').prepend(data);
+				NewGalleryWidget.cancel();
 			}
 		}); 
 
+	},
+
+
+
+	cancel: function() {
+		this.newGalleryName.val("");
+		this.newGalleryDescription.val("");
+		this.newGallery.slideToggle();
 	}
 };
 
@@ -50,18 +62,12 @@ var newGalleryWidget = {
 
 
 
-
-var editGalleryWidget = {
+var EditGalleryWidget = {
 
 
 	widget: jQuery('#editGallery'),
 	nameInput: jQuery('#editGallery [name=name]'),
 	descriptionInput: jQuery('#editGallery [name=description]'),
-
-
-	saveButton: jQuery('#editGallery [type=submit]'),
-	cancelButton: jQuery('#editGallery [name=cancel]'),
-	deleteButton: jQuery('#editGallery [name=delete]'),
 
 	
 	galleryData: {
@@ -74,27 +80,36 @@ var editGalleryWidget = {
 
 
 	init: function() {
-		jQuery('.galleryEditor [name=edit]').on('click', function() {
+		jQuery('.galleryEditors').on('click', '.galleryEditor [name=edit]', function() {
 			var gallery = jQuery(this).parent();
-			editGalleryWidget.galleryData.id = gallery.attr('data-id');
-			editGalleryWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
-			editGalleryWidget.galleryData.description = gallery.find( 'p' ).text().trim();
-			editGalleryWidget.galleryData.title_image_url = gallery.find('img').attr("src");
+			EditGalleryWidget.galleryData.id = gallery.attr('data-id');
+			EditGalleryWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
+			EditGalleryWidget.galleryData.description = gallery.find( 'p' ).text().trim();
+			EditGalleryWidget.galleryData.title_image_url = gallery.find('img').attr("src");
 
-			editGalleryWidget.activate();
+			EditGalleryWidget.activate();
 		});
 
-		this.saveButton.on('click', function() {
-			editGalleryWidget.save();
+		this.bindActions();
+
+	},
+
+
+
+	bindActions: function() {
+
+		jQuery('#editGallery [type=submit]').on('click', function() {
+			EditGalleryWidget.save();
 		});
 
-		this.cancelButton.on('click', function() {
-			editGalleryWidget.cancel();
+		jQuery('#editGallery [name=cancel]').on('click', function() {
+			EditGalleryWidget.cancel();
 		});
 
-		this.deleteButton.on('click', function() {
-			editGalleryWidget.deleteGallery();
+		jQuery('#editGallery [name=delete]').on('click', function() {
+			EditGalleryWidget.deleteGallery();
 		});
+
 	},
 
 
@@ -120,11 +135,11 @@ var editGalleryWidget = {
 			},
 			
 			success: function(data){
-				var changedGallery = jQuery('.galleryEditor[data-id=' + editGalleryWidget.galleryData.id + ']');
-				changedGallery.find('h3').html(editGalleryWidget.nameInput.val());
-				changedGallery.find('p').html(editGalleryWidget.descriptionInput.val());
+				var changedGallery = jQuery('.galleryEditor[data-id=' + EditGalleryWidget.galleryData.id + ']');
+				changedGallery.find('h3').html(EditGalleryWidget.nameInput.val());
+				changedGallery.find('p').html(EditGalleryWidget.descriptionInput.val());
 
-				editGalleryWidget.cancel();
+				EditGalleryWidget.cancel();
 			}
 		}); 
 	},
@@ -159,8 +174,8 @@ var editGalleryWidget = {
 				
 
 				success: function(data) {
-					jQuery( '[data-id=' + editGalleryWidget.galleryData.id + ']').hide(400);
-					editGalleryWidget.cancel();
+					jQuery( '[data-id=' + EditGalleryWidget.galleryData.id + ']').hide(400);
+					EditGalleryWidget.cancel();
 				}
 
 			});
@@ -169,5 +184,18 @@ var editGalleryWidget = {
 	}
 };
 
-newGalleryWidget.init();
-editGalleryWidget.init();
+
+
+
+
+var ImageSelectionWidget = {
+
+
+	init: function() {
+
+	},
+}
+
+NewGalleryWidget.init();
+EditGalleryWidget.init();
+ImageSelectionWidget.init();

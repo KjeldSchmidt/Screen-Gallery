@@ -146,7 +146,7 @@ function addGallery() {
 	$newGallery['id'] = $wpdb->insert_id;
 	include_once( 'adminTabs/classes.backend.php' );
 	$newGallery = new Gallery( $newGallery );
-	echo $newGallery->build_backend();
+	echo $newGallery->buildBackend();
 
 	die();
 }

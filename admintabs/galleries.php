@@ -83,7 +83,7 @@ function getGalleries($offset=0, $search="") {
 
 		foreach ( $galleries as $gallery ) {
 			$gallery = new Gallery($gallery);
-			$gallery->build_backend();
+			$gallery->buildBackend();
 		}
 
 	?> </div> <?php

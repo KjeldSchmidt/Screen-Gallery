@@ -20,7 +20,7 @@ class GalleryBackendController {
 
 		foreach ( $images as $image ) {
 			$image = new GalleryImage($image);
-			$image->build_backend();
+			$image->buildBackend();
 		}
 	}
 }
@@ -39,7 +39,7 @@ class GalleryImage {
 		$this->description = $image_object->post_content;
 	}
 
-	function build_backend() { ?>
+	function buildBackend() { ?>
 		<div class="imageEditor">
 			<img src="<?php echo $this->url ?>" alt="" width="200">
 			<h3><?php echo $this->title ?></h3>
@@ -87,7 +87,7 @@ class Gallery {
 	}
 
 
-	function build_backend() { ?>
+	function buildBackend() { ?>
 		<div class="galleryEditor" data-id="<?php echo $this->id; ?>">
 			<img src="<?php echo $this->title_image_url ?>" alt="" height="200">
 			<h3>

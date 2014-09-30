@@ -13,20 +13,21 @@ var NewGalleryWidget = {
 	},
 
 
-
 	bindActions: function() {
 		jQuery('#addGalleryButton').on('click', function() {
 			NewGalleryWidget.newGallery.slideToggle();
 		});
 
-		jQuery('#addGallery [type=submit]').on('click', function(e) {
+		this.newGallery.find('[type=submit]').on('click', function(e) {
 			NewGalleryWidget.send(e);
 		});
 
-		jQuery('#addGallery [name=cancel]').on('click', function() {
+		this.newGallery.find('[name=cancel]').on('click', function() {
 			NewGalleryWidget.cancel();
 		});
 	},
+
+
 
 
 
@@ -48,7 +49,6 @@ var NewGalleryWidget = {
 		}); 
 
 	},
-
 
 
 	cancel: function() {
@@ -79,6 +79,8 @@ var EditGalleryWidget = {
 
 
 
+
+
 	init: function() {
 		jQuery('.galleryEditors').on('click', '.galleryEditor [name=edit]', function() {
 			var gallery = jQuery(this).parent();
@@ -95,18 +97,17 @@ var EditGalleryWidget = {
 	},
 
 
-
 	bindActions: function() {
 
-		jQuery('#editGallery [type=submit]').on('click', function() {
+		this.widget.find('[type=submit]').on('click', function() {
 			EditGalleryWidget.save();
 		});
 
-		jQuery('#editGallery [name=cancel]').on('click', function() {
+		this.widget.find('[name=cancel]').on('click', function() {
 			EditGalleryWidget.cancel();
 		});
 
-		jQuery('#editGallery [name=delete]').on('click', function() {
+		this.widget.find('[name=delete]').on('click', function() {
 			EditGalleryWidget.deleteGallery();
 		});
 
@@ -120,6 +121,8 @@ var EditGalleryWidget = {
 		this.descriptionInput.val ( this.galleryData.description );
 		window.scrollTo(0, 0);
 	},
+
+
 
 
 
@@ -145,7 +148,6 @@ var EditGalleryWidget = {
 	},
 
 
-
 	cancel: function() {
 		jQuery.each(this.galleryData, function(key, value) {
 			value = null;
@@ -155,7 +157,6 @@ var EditGalleryWidget = {
 		this.nameInput.val("");
 		this.descriptionInput.val("");
 	},
-
 
 
 	deleteGallery: function() {
@@ -190,10 +191,58 @@ var EditGalleryWidget = {
 
 var ImageSelectionWidget = {
 
+	headline: jQuery('#imageSelection h3'),
+	imageContainer: jQuery('#imageSelection .imageContainer'),
+
+	galleryData: {
+		id: null,
+		title: null,
+		title_image_url: null
+	},
+
+
+
+
 
 	init: function() {
+		jQuery('.galleryEditors').on('click', '.galleryEditor [name=images]', function() {
+			var gallery = jQuery(this).parent();
+			EditGalleryWidget.galleryData.id = gallery.attr('data-id');
+			EditGalleryWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
+			EditGalleryWidget.galleryData.description = gallery.find( 'p' ).text().trim();
+			EditGalleryWidget.galleryData.title_image_url = gallery.find('img').attr("src");
+
+			ImageSelectionWidget.activate();
+		});
+
+
+		this.bindActions();
 
 	},
+
+
+	activate: function() {
+		this.headline.html(this.galleryData.title);
+	},
+
+
+	bindActions: function() {
+
+	},
+
+
+
+
+
+	save: function() {
+
+	},
+
+
+	cancel: function () {
+		
+	}
+
 }
 
 NewGalleryWidget.init();

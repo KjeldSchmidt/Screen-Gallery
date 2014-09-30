@@ -1,6 +1,9 @@
 <button id="addGalleryButton" class="button button-primary button-large">Add Gallery</button>
 
 
+
+
+
 <div id="addGallery" class="hiddenWidget editingWidget">
 	<input type="text" placeholder="Name" name="name">
 	<textarea name="description" cols="30" rows="5" placeholder="Description"></textarea>
@@ -9,6 +12,10 @@
 		<button class="button button-secondary button-large" name="cancel">Cancel</button>
 	</span>
 </div>
+
+
+
+
 
 <div id="editGallery" class="hiddenWidget editingWidget">
 	<img src="" alt="">
@@ -20,6 +27,27 @@
 		<button class="button button-secondary button-large" name="delete">Delete</button>
 	</span>
 </div>
+
+
+
+
+
+<div id="imageSelection" class="hiddenWidget overlay">
+	<h3></h3>
+	
+	<button name="save" class="button button-primary button-large">Save</button>
+	<button name="discard" class="button button-secondary button-large">Cancel</button>
+
+	<div class="imageContainer"></div>
+
+	<button name="save" class="button button-primary button-large">Save</button>
+	<button name="discard" class="button button-secondary button-large">Cancel</button>
+</div>
+
+
+
+
+
 
 <?php
 

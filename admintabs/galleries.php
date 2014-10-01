@@ -103,7 +103,6 @@ function getGalleries($offset=0, $search="") {
 		"SELECT id, name, slug, description
 		FROM $table_name
 		ORDER BY name ASC
-		LIMIT $offset, 20
 		"
 	); 
 

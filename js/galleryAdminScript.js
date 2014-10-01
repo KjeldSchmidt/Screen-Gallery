@@ -191,8 +191,9 @@ var EditGalleryWidget = {
 
 var ImageSelectionWidget = {
 
-	headline: jQuery('#imageSelection h3'),
-	imageContainer: jQuery('#imageSelection .imageContainer'),
+	widget: jQuery('#imageSelection'),
+	headline: widget.find('h3'),
+	imageContainer: widget.find('.imageContainer'),
 
 	galleryData: {
 		id: null,
@@ -223,6 +224,28 @@ var ImageSelectionWidget = {
 
 	activate: function() {
 		this.headline.html(this.galleryData.title);
+
+		this.loadImages();
+
+	},
+
+
+	loadImages: function() {
+		jQuery.ajax({
+			type: "GET",
+			url: ajaxdata.ajaxurl,
+
+			data: {
+				action: 'getGalleryImages',
+				id: this.galleryData.id
+			},
+
+
+			success: function(data) {
+				ImageSelectionWidget.imageContainer.append(data);
+			}
+
+		});
 	},
 
 

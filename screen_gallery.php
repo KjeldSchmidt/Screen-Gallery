@@ -1,11 +1,11 @@
 <?php 
 /*
 Plugin Name: Screen Gallery
-Plugin URL: http://www.isabel-schmiedel.com/
+Plugin URL: http://www.superfluidwebdesign.com/
 Description: Gives you acces to a gallery that always fills the page and has tag-based dynamic search.
 Author: Kjeld Schmidt
 Version: 0.1
-Author URL: http://www.superfluidmercury.com/
+Author URL: http://www.superfluidwebdesign.com/
 */
 
 define('AJAXURL', WP_PLUGIN_URL."/".dirname( plugin_basename( __FILE__ ) ) );
@@ -35,6 +35,11 @@ function screenGalleryAdminActions() {
 function screenGalleryAdmin(){
 	include('screenGalleryAdmin.php');
 }
+
+
+
+
+
 
 
 
@@ -98,6 +103,11 @@ function gallery_post_type_init() {
 
 
 
+
+
+
+
+
 //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
 //~~~~~~~~~ AJAX calls ~~~~~~~~//
 //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
@@ -126,6 +136,7 @@ function getImageFeed() {
 
 function addGallery() {
 	global $wpdb;
+	include_once( 'adminTabs/classes.backend.php' );
 	
 
 	$newGallery['name'] = $_POST['name'];
@@ -144,7 +155,6 @@ function addGallery() {
 	);
 
 	$newGallery['id'] = $wpdb->insert_id;
-	include_once( 'adminTabs/classes.backend.php' );
 	$newGallery = new Gallery( $newGallery );
 	echo $newGallery->buildBackend();
 
@@ -183,6 +193,28 @@ function updateGallery() {
 	die();
 }
 
+
+
+function getGalleryImages() {
+	include_once( 'adminTabs/classes.backend.php' );
+
+
+	$gallery = GalleryBackendController::galleryById( $_GET['id'] );
+	$gallery->getImages();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
 //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´// 
 //~~~~~ Actions and Hooks ~~~~~//
 //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,//
@@ -212,6 +244,7 @@ add_action('wp_ajax_nopriv_get_images', 'getImageFeed');
 add_action('wp_ajax_addGallery', 'addGallery');
 add_action('wp_ajax_deleteGallery', 'deleteGallery');
 add_action('wp_ajax_updateGallery', 'updateGallery');
+add_action('wp_ajax_getGalleryImages', 'getGalleryImages');
 
 
 

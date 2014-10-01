@@ -199,11 +199,11 @@ function getGalleryImages() {
 	include_once( 'adminTabs/classes.backend.php' );
 
 
-	$gallery = GalleryBackendController::galleryById( $_GET['id'] );
+	$gallery = GalleryBackendController::galleryById( $_POST['id'] );
 	$gallery->getImages();
 
 
-
+	die();
 }
 
 

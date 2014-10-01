@@ -36,12 +36,12 @@
 	<h3></h3>
 	
 	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="discard" class="button button-secondary button-large">Cancel</button>
+	<button name="cancel" class="button button-secondary button-large">Cancel</button>
 
 	<div class="imageContainer"></div>
 
 	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="discard" class="button button-secondary button-large">Cancel</button>
+	<button name="cancel" class="button button-secondary button-large">Cancel</button>
 </div>
 
 
@@ -87,7 +87,7 @@ function tables_install() {
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		imageid mediumint(9) NOT NULL,
 		galleryid mediumint(9) NOT NULL,
-		order mediumint(9),
+		sequence mediumint(9) NOT NULL,
 		UNIQUE KEY id (id)
 	) $charset_collate;";
 
@@ -102,8 +102,7 @@ function getGalleries($offset=0, $search="") {
 	$galleries = $wpdb->get_results(
 		"SELECT id, name, slug, description
 		FROM $table_name
-		ORDER BY name ASC
-		"
+		ORDER BY name ASC"
 	); 
 
 	?> <div class="galleryEditors"> <?php

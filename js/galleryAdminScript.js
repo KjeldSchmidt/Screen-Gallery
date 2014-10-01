@@ -192,8 +192,8 @@ var EditGalleryWidget = {
 var ImageSelectionWidget = {
 
 	widget: jQuery('#imageSelection'),
-	headline: widget.find('h3'),
-	imageContainer: widget.find('.imageContainer'),
+	headline: jQuery('#imageSelection h3'),
+	imageContainer: jQuery('#imageSelection .imageContainer'),
 
 	galleryData: {
 		id: null,
@@ -207,11 +207,15 @@ var ImageSelectionWidget = {
 
 	init: function() {
 		jQuery('.galleryEditors').on('click', '.galleryEditor [name=images]', function() {
+
+			
+
 			var gallery = jQuery(this).parent();
-			EditGalleryWidget.galleryData.id = gallery.attr('data-id');
-			EditGalleryWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
-			EditGalleryWidget.galleryData.description = gallery.find( 'p' ).text().trim();
-			EditGalleryWidget.galleryData.title_image_url = gallery.find('img').attr("src");
+
+			ImageSelectionWidget.galleryData.id = gallery.attr('data-id');
+			ImageSelectionWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
+			ImageSelectionWidget.galleryData.description = gallery.find( 'p' ).text().trim();
+			ImageSelectionWidget.galleryData.title_image_url = gallery.find('img').attr("src");
 
 			ImageSelectionWidget.activate();
 		});
@@ -222,17 +226,27 @@ var ImageSelectionWidget = {
 	},
 
 
+	bindActions: function() {
+		this.widget.find('[name=cancel]').on('click', function() {
+			ImageSelectionWidget.cancel();
+		});
+
+		this.widget.find('[name=save]').on('click', function() {
+			ImageSelectionWidget.save();
+		});
+	},
+
+
 	activate: function() {
 		this.headline.html(this.galleryData.title);
-
 		this.loadImages();
-
 	},
+
 
 
 	loadImages: function() {
 		jQuery.ajax({
-			type: "GET",
+			type: "POST",
 			url: ajaxdata.ajaxurl,
 
 			data: {
@@ -243,18 +257,11 @@ var ImageSelectionWidget = {
 
 			success: function(data) {
 				ImageSelectionWidget.imageContainer.append(data);
+				ImageSelectionWidget.widget.show(400);
 			}
 
 		});
 	},
-
-
-	bindActions: function() {
-
-	},
-
-
-
 
 
 	save: function() {
@@ -263,10 +270,15 @@ var ImageSelectionWidget = {
 
 
 	cancel: function () {
-		
+		jQuery.each(this.galleryData, function(key, value) {
+			value = null;
+		});
+
+		this.widget.hide(400);
+		this.imageContainer.html("");
 	}
 
-}
+};
 
 NewGalleryWidget.init();
 EditGalleryWidget.init();

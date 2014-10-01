@@ -26,21 +26,33 @@ class GalleryBackendController {
 
 
 	public static function galleryById( $id ) {
+		global $wpdb;
+
 		if ( isset ( $id ) ) {
 
+			$table_name = GALLERY_TABLE;
 			$gallery = $wpdb->get_results(
 				"SELECT id, name, slug, description
 				FROM $table_name
 				WHERE id = $id"
 			); 
 
-			return new Gallery($gallery);
+			foreach ($gallery as $gallery) {
+				return new Gallery( $gallery );
+			}
 
 		} else {
+
 			die ( "ID is required" );
+
 		}
 	}
 }
+
+
+
+
+
 
 
 
@@ -70,6 +82,11 @@ class GalleryImage {
 		</div>
 	<?php }
 }
+
+
+
+
+
 
 
 
@@ -132,20 +149,21 @@ class Gallery {
 		global $wpdb;
 
 		$table_name = RELATION_TABLE;
-		$galleries = $wpdb->get_results(
-			"SELECT ID, guid as URL
+		$id = $this->id;
+
+		$images = $wpdb->get_results(
+			"SELECT posts.ID, guid as URL
 			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.id
-			WHERE galleryid = $this->id
-			ORDER BY order ASC
-			"
+			WHERE galleryid = $id
+			ORDER BY sequence ASC"
 		);
 
-		if (!is_null($galleries)) {
-			foreach ($galleries as $key => $value) {
+		if (!empty($images)) {
+			foreach ($images as $key => $value) {
 				
 			}
-		} else { ?>
-			<?php GalleryBackendController::getImageAttachments(); ?>
+		} else {
+			GalleryBackendController::getImageAttachments();
 		} 
 
 	}

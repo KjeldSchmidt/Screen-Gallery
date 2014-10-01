@@ -23,7 +23,28 @@ class GalleryBackendController {
 			$image->buildBackend();
 		}
 	}
+
+
+	public static function galleryById( $id ) {
+		if ( isset ( $id ) ) {
+
+			$gallery = $wpdb->get_results(
+				"SELECT id, name, slug, description
+				FROM $table_name
+				WHERE id = $id"
+			); 
+
+			return new Gallery($gallery);
+
+		} else {
+			die ( "ID is required" );
+		}
+	}
 }
+
+
+
+
 
 class GalleryImage {
 
@@ -49,6 +70,10 @@ class GalleryImage {
 		</div>
 	<?php }
 }
+
+
+
+
 
 class Gallery {
 
@@ -99,8 +124,8 @@ class Gallery {
 			<button class="button button-primary button-large" name="shortcode">Get Shortocde</button>
 			<button class="button button-secondary button-large" name="images">View all images</button>
 			<button class="button button-secondary button-large" name="edit">Edit</button>
-		</div>
-	<?php }
+		</div> <?php
+	}
 
 
 	function getImages() {
@@ -111,6 +136,7 @@ class Gallery {
 			"SELECT ID, guid as URL
 			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.id
 			WHERE galleryid = $this->id
+			ORDER BY order ASC
 			"
 		);
 
@@ -119,10 +145,8 @@ class Gallery {
 				
 			}
 		} else { ?>
-			<div class="galleryImageSelector">
-				<?php GalleryBackendController::getImageAttachments(); ?>
-			</div>
-		}
+			<?php GalleryBackendController::getImageAttachments(); ?>
+		} 
 
 	}
 }

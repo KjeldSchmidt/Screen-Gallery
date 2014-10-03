@@ -160,15 +160,19 @@ class Gallery {
 		$id = $this->id;
 
 		$images = $wpdb->get_results(
-			"SELECT posts.ID, guid as URL
-			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.id
+			"SELECT posts.ID as id, guid as url
+			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.imageid
 			WHERE galleryid = $id
 			ORDER BY sequence ASC"
 		);
 
 		if (!empty($images)) {
 			foreach ($images as $key => $value) {
-				
+				?>
+				<img class="galleryEditImage" 
+					src="<?php echo $value->url ?>"
+					data-id="<?php echo $value->id; ?>" >
+				<?php
 			}
 		} else {
 			?> <p>No images are assigned to the gallery at the moment - select them here! </p> <?php

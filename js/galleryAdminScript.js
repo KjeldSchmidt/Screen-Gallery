@@ -180,7 +180,6 @@ var EditGalleryWidget = {
 				}
 
 			});
-
 		}
 	}
 };
@@ -234,6 +233,10 @@ var ImageSelectionWidget = {
 		this.widget.find('[name=save]').on('click', function() {
 			ImageSelectionWidget.save();
 		});
+
+		this.widget.on('click', '.imageEditor', function() {
+			jQuery(this).toggleClass('addToGallery');
+		});
 	},
 
 
@@ -265,7 +268,28 @@ var ImageSelectionWidget = {
 
 
 	save: function() {
+		var imagesToAdd = [];
 
+		this.imageContainer.find('.addToGallery').each(function() {
+			imagesToAdd.push(jQuery(this).attr('data-id'));
+		});
+
+
+		jQuery.ajax({
+			method: 'POST',
+			url: ajaxdata.ajaxurl,
+
+			data: {
+				action: 'saveRelationship',
+				imageIds: imagesToAdd,
+				galleryId: this.galleryData.id
+			},
+
+			success: function(data) {
+				console.log(data);
+				ImageSelectionWidget.cancel();
+			}
+		});
 	},
 
 

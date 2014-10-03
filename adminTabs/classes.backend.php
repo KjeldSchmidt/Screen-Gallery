@@ -11,9 +11,9 @@ class GalleryBackendController {
 	public static function getImageAttachments() {
 		global $wpdb;
 
+
 		$images = $wpdb->get_results(
-			"
-			SELECT ID, post_content, post_title, guid AS url
+			"SELECT ID, post_content, post_title, guid AS url
 			FROM $wpdb->posts
 			WHERE post_mime_type LIKE 'image%'"
 		);
@@ -27,6 +27,7 @@ class GalleryBackendController {
 
 	public static function galleryById( $id ) {
 		global $wpdb;
+
 
 		if ( isset ( $id ) ) {
 
@@ -65,6 +66,10 @@ class GalleryImage {
 	private $title;
 	private $description;
 
+
+
+
+
 	function __construct($image_object) {
 		$this->id = $image_object->ID;
 		$this->url = $image_object->url;
@@ -72,12 +77,13 @@ class GalleryImage {
 		$this->description = $image_object->post_content;
 	}
 
+
 	function buildBackend() { ?>
-		<div class="imageEditor">
+		<div class="imageEditor" data-id="<?php echo $this->id ?>">
 			<img src="<?php echo $this->url ?>" alt="" width="200">
 			<h3><?php echo $this->title ?></h3>
 			<p><?php echo $this->description ?></p>
-			<button class="button button-primary button-large">Add to gallery</button>
+			<button class="button button-primary button-large" name="addToGallery">Add to gallery</button>
 			<button class="button button-secondary button-large">Edit</button>
 		</div>
 	<?php }
@@ -102,6 +108,7 @@ class Gallery {
 	private $description;
 	private $title_image_url;
 	private $hasImages = false;
+
 
 
 
@@ -148,6 +155,7 @@ class Gallery {
 	function getImages() {
 		global $wpdb;
 
+
 		$table_name = RELATION_TABLE;
 		$id = $this->id;
 
@@ -163,9 +171,26 @@ class Gallery {
 				
 			}
 		} else {
+			?> <p>No images are assigned to the gallery at the moment - select them here! </p> <?php
 			GalleryBackendController::getImageAttachments();
 		} 
+	}
 
+
+
+	function addImage( $imageId ) {
+		global $wpdb;
+
+
+		$table_name = RELATION_TABLE;
+		$wpdb->insert(
+			$table_name,
+			array(
+				'imageid' => $imageId,
+				'galleryid' => $this->id
+			),
+			array( '%d', '%d' )
+		);
 	}
 }
 

@@ -143,7 +143,7 @@ function addGallery() {
 	$newGallery['slug'] = sanitize_title($_POST['name']);
 	$newGallery['description'] = $_POST['description'];
 	
-	$table_name = $wpdb->prefix . 'screengallery_galleries';
+	$table_name = GALLERY_TABLE;
 	
 	$wpdb->insert( 
 		$table_name, 
@@ -158,6 +158,7 @@ function addGallery() {
 	$newGallery = new Gallery( $newGallery );
 	echo $newGallery->buildBackend();
 
+
 	die();
 }
 
@@ -170,6 +171,7 @@ function deleteGallery() {
 
 	$wpdb->delete( GALLERY_TABLE, array( 'id' => $_POST['id'] ) );
 	$wpdb->delete( RELATION_TABLE, array( 'galleryid' => $_POST['id'] ) );
+
 
 	die();
 }
@@ -190,6 +192,7 @@ function updateGallery() {
 		array( 'id' => $_POST['id'] )
 	);
 
+
 	die();
 }
 
@@ -206,6 +209,21 @@ function getGalleryImages() {
 	die();
 }
 
+function saveRelationship() {
+	include_once( 'adminTabs/classes.backend.php' );
+	global $wpdb;
+
+
+	$gallery = GalleryBackendController::galleryById( $_POST['galleryId'] );
+	$images = $_POST['imageIds'];
+
+	foreach ($images as $key => $value) {
+		$gallery->addImage( $value );
+	}
+
+
+	die();
+}
 
 
 
@@ -245,6 +263,7 @@ add_action('wp_ajax_addGallery', 'addGallery');
 add_action('wp_ajax_deleteGallery', 'deleteGallery');
 add_action('wp_ajax_updateGallery', 'updateGallery');
 add_action('wp_ajax_getGalleryImages', 'getGalleryImages');
+add_action('wp_ajax_saveRelationship', 'saveRelationship');
 
 
 

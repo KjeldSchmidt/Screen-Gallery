@@ -1,6 +1,9 @@
 .adminArea {
-  font-size: 1em;
   margin: 10px; }
+  .adminArea * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
 
 .adminContent {
   background: none repeat scroll 0% 0% #fff;
@@ -13,12 +16,6 @@
   padding: 5px;
   text-align: left; }
 
-.galleryEditImage {
-  max-width: 300px;
-  max-height: 300px;
-  height: auto;
-  width: auto; }
-
 .hiddenWidget {
   display: none; }
 
@@ -27,9 +24,39 @@
   width: 50%;
   margin: 10px auto; }
 
+#imageSelection {
+  text-align: center; }
+  #imageSelection img {
+    max-width: 300px;
+    max-height: 300px;
+    height: auto;
+    width: auto;
+    vertical-align: top; }
+
 .imageEditor {
   margin: 10px;
-  clear: both; }
-  .imageEditor img {
-    float: left;
-    margin: 10px; }
+  display: inline-block;
+  vertical-align: middle;
+  position: relative; }
+  .imageEditor.addToGallery {
+    -webkit-box-shadow: 0px 0px 5px 5px #1e8cbe;
+    box-shadow: 0px 0px 5px 5px #1e8cbe; }
+  .imageEditor:hover h3, .imageEditor:hover p {
+    opacity: 1;
+    -webkit-transition: opacity 1.5s ease;
+    transition: opacity 1.5s ease; }
+  .imageEditor h3, .imageEditor p {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.75);
+    opacity: 0;
+    padding: 5px;
+    -webkit-transition: opacity;
+    transition: opacity; }
+  .imageEditor h3 {
+    top: 0; }
+  .imageEditor p {
+    bottom: 0px; }
+  .imageEditor p:empty, .imageEditor h3:empty {
+    display: none; }

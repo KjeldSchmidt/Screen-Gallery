@@ -206,9 +206,8 @@ var ImageSelectionWidget = {
 
 	init: function() {
 		jQuery('.galleryEditors').on('click', '.galleryEditor [name=images]', function() {
-
-			
-
+						
+			ImageSelectionWidget.cancel();
 			var gallery = jQuery(this).parent();
 
 			ImageSelectionWidget.galleryData.id = gallery.attr('data-id');
@@ -235,7 +234,7 @@ var ImageSelectionWidget = {
 		});
 
 		this.widget.on('click', '.imageEditor', function() {
-			jQuery(this).toggleClass('addToGallery');
+			ImageSelectionWidget.toggleSave(this);
 		});
 	},
 
@@ -264,6 +263,11 @@ var ImageSelectionWidget = {
 			}
 
 		});
+	},
+
+
+	toggleSave: function(element) {
+		jQuery(element).toggleClass('addToGallery');
 	},
 
 

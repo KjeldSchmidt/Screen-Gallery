@@ -8,7 +8,7 @@ class GalleryBackendController {
 	}
 
 
-	public static function getImageAttachments() {
+	public static function getImageAttachments( $showButtons=true ) {
 		global $wpdb;
 
 
@@ -20,7 +20,7 @@ class GalleryBackendController {
 
 		foreach ( $images as $image ) {
 			$image = new GalleryImage($image);
-			$image->buildBackend();
+			$image->buildBackend( $showButtons );
 		}
 	}
 
@@ -44,7 +44,31 @@ class GalleryBackendController {
 
 		} else {
 
-			die ( "ID is required" );
+			die ( "ID is required to get a gallery" );
+
+		}
+	}
+
+
+	public static function imageById( $id ) {
+		global $wpdb;
+
+
+		if ( isset ( $id ) ) {
+
+			$image = $wpdb->get_results(
+				"SELECT ID, post_content, post_title, guid AS url
+				FROM $wpdb->posts
+				WHERE ID = $id"
+			);
+
+			foreach ($image as $image) {
+				return new GalleryImage( $image );
+			}
+
+		} else {
+
+			die ( "ID is required to get an image" );
 
 		}
 	}
@@ -78,13 +102,15 @@ class GalleryImage {
 	}
 
 
-	function buildBackend() { ?>
+	function buildBackend( $showButtons ) { ?>
 		<div class="imageEditor" data-id="<?php echo $this->id ?>">
 			<img src="<?php echo $this->url ?>" alt="" width="200">
 			<h3><?php echo $this->title ?></h3>
 			<p><?php echo $this->description ?></p>
-			<button class="button button-primary button-large" name="addToGallery">Add to gallery</button>
-			<button class="button button-secondary button-large">Edit</button>
+			<?php if ($showButtons) { ?>
+				<button class="button button-primary button-large" name="addToGallery">Add to gallery</button>
+				<button class="button button-secondary button-large">Edit</button>	
+			<?php } ?>
 		</div>
 	<?php }
 }
@@ -157,26 +183,23 @@ class Gallery {
 
 
 		$table_name = RELATION_TABLE;
-		$id = $this->id;
+		$galleryId = $this->id;
 
 		$images = $wpdb->get_results(
-			"SELECT posts.ID as id, guid as url
+			"SELECT posts.ID as id
 			FROM $wpdb->posts posts INNER JOIN $table_name relation on posts.ID = relation.imageid
-			WHERE galleryid = $id
+			WHERE galleryid = $galleryId
 			ORDER BY sequence ASC"
 		);
 
 		if (!empty($images)) {
 			foreach ($images as $key => $value) {
-				?>
-				<img class="galleryEditImage" 
-					src="<?php echo $value->url ?>"
-					data-id="<?php echo $value->id; ?>" >
-				<?php
+				$image = GalleryBackendController::imageById( $value->id );
+				$image->buildBackend( false );
 			}
 		} else {
 			?> <p>No images are assigned to the gallery at the moment - select them here! </p> <?php
-			GalleryBackendController::getImageAttachments();
+			GalleryBackendController::getImageAttachments( false );
 		} 
 	}
 

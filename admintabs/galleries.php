@@ -37,11 +37,13 @@
 	
 	<button name="save" class="button button-primary button-large">Save</button>
 	<button name="cancel" class="button button-secondary button-large">Cancel</button>
+	<button name="delete" class="button button-secondary button-large">Delete selected</button>
+	<div class="imageContainer">
 
-	<div class="imageContainer"></div>
+	</div>
 
 	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="cancel" class="button button-secondary button-large">Cancel</button>
+	<button name="delete" class="button button-secondary button-large">Delete selected</button>
 </div>
 
 

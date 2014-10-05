@@ -197,7 +197,6 @@ function updateGallery() {
 }
 
 
-
 function getGalleryImages() {
 	include_once( 'adminTabs/classes.backend.php' );
 
@@ -209,9 +208,9 @@ function getGalleryImages() {
 	die();
 }
 
+
 function saveRelationship() {
 	include_once( 'adminTabs/classes.backend.php' );
-	global $wpdb;
 
 
 	$gallery = GalleryBackendController::galleryById( $_POST['galleryId'] );
@@ -226,7 +225,18 @@ function saveRelationship() {
 }
 
 
+function deleteRelationship() {
+	include_once( 'adminTabs/classes.backend.php' );
 
+	$gallery = GalleryBackendController::galleryById( $_POST['galleryId'] );
+	$images = $_POST['imageIds'];
+
+	foreach ($images as $key => $value) {
+		$gallery->removeImage( $value );
+	}
+
+	die();
+}
 
 
 
@@ -264,6 +274,7 @@ add_action('wp_ajax_deleteGallery', 'deleteGallery');
 add_action('wp_ajax_updateGallery', 'updateGallery');
 add_action('wp_ajax_getGalleryImages', 'getGalleryImages');
 add_action('wp_ajax_saveRelationship', 'saveRelationship');
+add_action('wp_ajax_deleteRelationship', 'deleteRelationship');
 
 
 

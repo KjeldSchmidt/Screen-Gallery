@@ -6,8 +6,6 @@ var NewGalleryWidget = {
 
 	
 	
-
-
 	init: function() {
 		this.bindActions();
 	},
@@ -26,8 +24,6 @@ var NewGalleryWidget = {
 			NewGalleryWidget.cancel();
 		});
 	},
-
-
 
 
 
@@ -62,6 +58,11 @@ var NewGalleryWidget = {
 
 
 
+
+
+
+
+
 var EditGalleryWidget = {
 
 
@@ -76,8 +77,6 @@ var EditGalleryWidget = {
 		description: null,
 		title_image_url: null
 	},
-
-
 
 
 
@@ -121,8 +120,6 @@ var EditGalleryWidget = {
 		this.descriptionInput.val ( this.galleryData.description );
 		window.scrollTo(0, 0);
 	},
-
-
 
 
 
@@ -188,6 +185,11 @@ var EditGalleryWidget = {
 
 
 
+
+
+
+
+
 var ImageSelectionWidget = {
 
 	widget: jQuery('#imageSelection'),
@@ -233,6 +235,10 @@ var ImageSelectionWidget = {
 			ImageSelectionWidget.save();
 		});
 
+		this.widget.find('[name=delete]').on('click', function() {
+			ImageSelectionWidget.deleteSelected();
+		});
+
 		this.widget.on('click', '.imageEditor', function() {
 			ImageSelectionWidget.toggleSave(this);
 		});
@@ -242,6 +248,10 @@ var ImageSelectionWidget = {
 	activate: function() {
 		this.headline.html(this.galleryData.title);
 		this.loadImages();
+
+		this.imageContainer.sortable({
+			items: '.imageEditor'
+		});
 	},
 
 
@@ -290,10 +300,33 @@ var ImageSelectionWidget = {
 			},
 
 			success: function(data) {
-				console.log(data);
 				ImageSelectionWidget.cancel();
 			}
 		});
+	},
+
+
+	deleteSelected: function() {
+		if ( confirm( "All selected images will be deleted from this gallery. This can not be undone. Continue?" ) ) {
+			var imagesToAdd = [];
+
+			this.imageContainer.find('.addToGallery').each(function() {
+				imagesToAdd.push(jQuery(this).attr('data-id'));
+				jQuery(this).remove();
+			});
+
+
+			jQuery.ajax({
+				method: 'POST',
+				url: ajaxdata.ajaxurl,
+
+				data: {
+					action: 'deleteRelationship',
+					imageIds: imagesToAdd,
+					galleryId: this.galleryData.id
+				}
+			});
+		}
 	},
 
 

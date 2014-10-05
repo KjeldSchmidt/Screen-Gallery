@@ -32,21 +32,6 @@
 
 
 
-
-
-#imageSelection {
-
-	text-align: center;
-
-	img {
-		max-width: 300px;
-		max-height: 300px;
-		height: auto;
-		width: auto;
-		vertical-align: top;
-	}
-}
-
 .imageEditor {
 
 	margin: 10px;
@@ -83,6 +68,10 @@
 
 	p:empty, h3:empty {
 		display: none;
+	}
+
+	img {
+		vertical-align: middle;
 	}
 
 

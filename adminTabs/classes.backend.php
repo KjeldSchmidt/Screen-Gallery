@@ -193,10 +193,12 @@ class Gallery {
 		);
 
 		if (!empty($images)) {
+
 			foreach ($images as $key => $value) {
 				$image = GalleryBackendController::imageById( $value->id );
 				$image->buildBackend( false );
 			}
+
 		} else {
 			?> <p>No images are assigned to the gallery at the moment - select them here! </p> <?php
 			GalleryBackendController::getImageAttachments( false );
@@ -209,15 +211,22 @@ class Gallery {
 		global $wpdb;
 
 
-		$table_name = RELATION_TABLE;
+		
 		$wpdb->insert(
-			$table_name,
+			RELATION_TABLE,
 			array(
 				'imageid' => $imageId,
 				'galleryid' => $this->id
 			),
 			array( '%d', '%d' )
 		);
+	}
+
+
+	function removeImage( $imageId ) {
+		global $wpdb;
+
+		$wpdb->delete( RELATION_TABLE, array( 'galleryid' => $this->id, 'imageid' => $imageId ) );
 	}
 }
 

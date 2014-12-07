@@ -32,19 +32,33 @@
 
 
 
-<div id="imageSelection" class="hiddenWidget overlay">
+<div id="imageSelection" class="hiddenWidget">
 	<h3></h3>
 	
 	<button name="save" class="button button-primary button-large">Save</button>
 	<button name="cancel" class="button button-secondary button-large">Cancel</button>
-	<button name="delete" class="button button-secondary button-large">Delete selected</button>
+	
+
+	<div class="deletedImages imageDropArea">
+		<h3>
+			Delete Images
+		</h3>
+		<p class="description">
+			Drop images here to be deleted from the gallery.
+		</p>
+	</div>
 	<div class="imageContainer">
 
 	</div>
-
+	
+	
 	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="delete" class="button button-secondary button-large">Delete selected</button>
+	<button name="cancel" class="button button-secondary button-large">Cancel</button>
 </div>
+
+
+
+
 
 
 
@@ -96,7 +110,7 @@ function tables_install() {
 	dbDelta( $sql );
 }
 
-function getGalleries($offset=0, $search="") {
+function getGalleries( $offset=0 ) {
 	global $wpdb;
 
 	$table_name = GALLERY_TABLE;
@@ -107,14 +121,18 @@ function getGalleries($offset=0, $search="") {
 		ORDER BY name ASC"
 	); 
 
-	?> <div class="galleryEditors"> <?php
+	?> 
 
-		foreach ( $galleries as $gallery ) {
-			$gallery = new Gallery($gallery);
-			$gallery->buildBackend();
-		}
+	<div class="galleryEditors"> 
+		<?php
+			foreach ( $galleries as $gallery ) {
+				$gallery = new Gallery($gallery);
+				$gallery->buildBackend();
+			}
+		?> 
+	</div> 
 
-	?> </div> <?php
+	<?php
 }
 
 getGalleries();

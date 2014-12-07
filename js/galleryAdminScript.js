@@ -294,7 +294,7 @@ var ImageSelectionWidget = {
 			url: ajaxdata.ajaxurl,
 
 			data: {
-				action: 'saveRelationship',
+				action: 'saveAllToGallery',
 				imageIds: imagesToAdd,
 				galleryId: this.galleryData.id
 			},

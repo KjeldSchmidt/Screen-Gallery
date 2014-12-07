@@ -209,15 +209,16 @@ function getGalleryImages() {
 }
 
 
-function saveRelationship() {
+function saveAllToGallery() {
 	include_once( 'adminTabs/classes.backend.php' );
 
 
 	$gallery = GalleryBackendController::galleryById( $_POST['galleryId'] );
 	$images = $_POST['imageIds'];
 
+	$gallery->removeAllImages();
 	foreach ($images as $key => $value) {
-		$gallery->addImage( $value );
+		$gallery->addImage( $value, $key );
 	}
 
 
@@ -273,7 +274,7 @@ add_action('wp_ajax_addGallery', 'addGallery');
 add_action('wp_ajax_deleteGallery', 'deleteGallery');
 add_action('wp_ajax_updateGallery', 'updateGallery');
 add_action('wp_ajax_getGalleryImages', 'getGalleryImages');
-add_action('wp_ajax_saveRelationship', 'saveRelationship');
+add_action('wp_ajax_saveAllToGallery', 'saveAllToGallery');
 add_action('wp_ajax_deleteRelationship', 'deleteRelationship');
 
 

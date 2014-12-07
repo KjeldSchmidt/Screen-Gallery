@@ -1,6 +1,8 @@
 .adminArea {
   margin: 10px; }
   .adminArea * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box; }
 
 .adminContent {
@@ -22,19 +24,17 @@
   width: 50%;
   margin: 10px auto; }
 
-.imageDropArea {
-  height: 100px; }
-
 .imageEditor {
   margin: 10px;
   display: inline-block;
-  vertical-align: bottom;
-  text-align: center;
+  vertical-align: middle;
   position: relative; }
-  .imageEditor.addToGallery img {
+  .imageEditor.addToGallery {
+    -webkit-box-shadow: 0px 0px 5px 5px #1e8cbe;
     box-shadow: 0px 0px 5px 5px #1e8cbe; }
   .imageEditor:hover h3, .imageEditor:hover p {
     opacity: 1;
+    -webkit-transition: opacity 1.5s ease;
     transition: opacity 1.5s ease; }
   .imageEditor h3, .imageEditor p {
     text-align: center;
@@ -43,6 +43,7 @@
     background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.75);
     opacity: 0;
     padding: 5px;
+    -webkit-transition: opacity;
     transition: opacity; }
   .imageEditor h3 {
     top: 0; }
@@ -51,5 +52,4 @@
   .imageEditor p:empty, .imageEditor h3:empty {
     display: none; }
   .imageEditor img {
-    vertical-align: middle;
-    margin: 1em 0; }
+    vertical-align: middle; }

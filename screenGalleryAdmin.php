@@ -34,4 +34,5 @@ wp_register_script('galleryAdminScript', plugins_url('js/galleryAdminScript.js',
 wp_enqueue_script('galleryAdminScript');
 wp_localize_script('galleryAdminScript', 'ajaxdata', array('ajaxurl' => admin_url('admin-ajax.php')));
 
+
 ?>

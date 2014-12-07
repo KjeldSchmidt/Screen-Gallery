@@ -8,14 +8,16 @@ class GalleryBackendController {
 	}
 
 
-	public static function getImageAttachments( $showButtons=true ) {
+	public static function getImageAttachments( $showButtons=true, $offset=0, $limit=20 ) {
 		global $wpdb;
 
 
 		$images = $wpdb->get_results(
 			"SELECT ID, post_content, post_title, guid AS url
 			FROM $wpdb->posts
-			WHERE post_mime_type LIKE 'image%'"
+			WHERE post_mime_type LIKE 'image%'
+			LIMIT $offset, $limit
+			"
 		);
 
 		foreach ( $images as $image ) {
@@ -104,11 +106,12 @@ class GalleryImage {
 
 	function buildBackend( $showButtons ) { ?>
 		<div class="imageEditor" data-id="<?php echo $this->id ?>">
-			<img src="<?php echo $this->url ?>" alt="" width="200">
 			<h3><?php echo $this->title ?></h3>
 			<p><?php echo $this->description ?></p>
+			<img src="<?php echo $this->url ?>" alt="" width="200">
+			<br>
 			<?php if ($showButtons) { ?>
-				<button class="button button-primary button-large" name="addToGallery">Add to gallery</button>
+				<button class="button button-primary button-large" name="addToGallery">Add to Gallery</button>
 				<button class="button button-secondary button-large">Edit</button>	
 			<?php } ?>
 		</div>
@@ -207,18 +210,19 @@ class Gallery {
 
 
 
-	function addImage( $imageId ) {
+	function addImage( $imageId, $sequence = null ) {
 		global $wpdb;
 
 
-		
+
 		$wpdb->insert(
 			RELATION_TABLE,
 			array(
 				'imageid' => $imageId,
-				'galleryid' => $this->id
+				'galleryid' => $this->id,
+				'sequence' => $sequence
 			),
-			array( '%d', '%d' )
+			array( '%d', '%d', '%d' )
 		);
 	}
 
@@ -227,6 +231,16 @@ class Gallery {
 		global $wpdb;
 
 		$wpdb->delete( RELATION_TABLE, array( 'galleryid' => $this->id, 'imageid' => $imageId ) );
+	}
+
+	function removeAllImages() {
+		$wpdb->delete(
+			RELATION_TABLE,
+			array(
+				'galleryid' => $this->id;
+			),
+			array( '%d' )
+		);
 	}
 }
 

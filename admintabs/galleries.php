@@ -37,13 +37,23 @@
 	
 	<button name="save" class="button button-primary button-large">Save</button>
 	<button name="cancel" class="button button-secondary button-large">Cancel</button>
-	<button name="delete" class="button button-secondary button-large">Delete selected</button>
+	
+
+	<div class="deletedImages imageDropArea">
+		<h3>
+			Delete Images
+		</h3>
+		<p class="description">
+			Drop images here to be deleted from the gallery.
+		</p>
+	</div>
 	<div class="imageContainer">
 
 	</div>
-
+	
+	
 	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="delete" class="button button-secondary button-large">Delete selected</button>
+	<button name="cancel" class="button button-secondary button-large">Cancel</button>
 </div>
 
 

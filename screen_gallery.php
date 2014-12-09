@@ -134,6 +134,16 @@ function getImageFeed() {
 #		Backend
 #
 
+function getAllImages() {
+	include_once( 'adminTabs/classes.backend.php' );
+
+
+	GalleryBackendController::getImageAttachments( false );
+
+
+	die();
+}
+
 function addGallery() {
 	global $wpdb;
 	include_once( 'adminTabs/classes.backend.php' );
@@ -205,6 +215,7 @@ function getGalleryImages() {
 	$gallery->getImages();
 
 
+
 	die();
 }
 
@@ -217,6 +228,7 @@ function saveAllToGallery() {
 	$images = $_POST['imageIds'];
 
 	$gallery->removeAllImages();
+
 	foreach ($images as $key => $value) {
 		$gallery->addImage( $value, $key );
 	}
@@ -270,6 +282,7 @@ add_action('wp_ajax_nopriv_get_images', 'getImageFeed');
 
 # Backend AJAX
 
+add_action('wp_ajax_getAllImages', 'getAllImages');
 add_action('wp_ajax_addGallery', 'addGallery');
 add_action('wp_ajax_deleteGallery', 'deleteGallery');
 add_action('wp_ajax_updateGallery', 'updateGallery');

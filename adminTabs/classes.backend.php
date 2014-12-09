@@ -175,7 +175,6 @@ class Gallery {
 				<?php echo $this->description ?>
 			</p>
 			<button class="button button-primary button-large" name="shortcode">Get Shortocde</button>
-			<button class="button button-secondary button-large" name="images">View all images</button>
 			<button class="button button-secondary button-large" name="edit">Edit</button>
 		</div> <?php
 	}
@@ -195,17 +194,10 @@ class Gallery {
 			ORDER BY sequence ASC"
 		);
 
-		if (!empty($images)) {
-
-			foreach ($images as $key => $value) {
-				$image = GalleryBackendController::imageById( $value->id );
-				$image->buildBackend( false );
-			}
-
-		} else {
-			?> <p>No images are assigned to the gallery at the moment - select them here! </p> <?php
-			GalleryBackendController::getImageAttachments( false );
-		} 
+		foreach ($images as $key => $value) {
+			$image = GalleryBackendController::imageById( $value->id );
+			$image->buildBackend( false );
+		}
 	}
 
 
@@ -215,14 +207,13 @@ class Gallery {
 
 		$table_name = RELATION_TABLE;
 
-		if ($sequence == null) {
+		if ($sequence === null) {
 			$sequence = $wpdb->get_var(
 				"SELECT sequence
 				FROM $table_name
 				ORDER BY sequence DESC"
 			);
 		}
-
 
 		$wpdb->insert(
 			RELATION_TABLE,

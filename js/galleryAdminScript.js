@@ -1,41 +1,45 @@
 var NewGalleryWidget = {
 
-	newGallery: jQuery('#addGallery'),
-	newGalleryName: jQuery('#addGallery [name=name]'),
-	newGalleryDescription: jQuery('#addGallery [name=description]'),
+	widget: jQuery('#addGallery'),
+	nameInput: jQuery('#addGallery [name=name]'),
+	descriptionInput: jQuery('#addGallery [name=description]'),
 
 	
 	
 	init: function() {
+		jQuery('#addGalleryButton').on('click', function() {
+			NewGalleryWidget.activate();
+		});
+
 		this.bindActions();
 	},
 
 
 	bindActions: function() {
-		jQuery('#addGalleryButton').on('click', function() {
-			NewGalleryWidget.newGallery.slideToggle();
+		this.widget.find('[type=submit]').on('click', function(e) {
+			NewGalleryWidget.save();
 		});
 
-		this.newGallery.find('[type=submit]').on('click', function(e) {
-			NewGalleryWidget.send(e);
-		});
-
-		this.newGallery.find('[name=cancel]').on('click', function() {
+		this.widget.find('[name=cancel]').on('click', function() {
 			NewGalleryWidget.cancel();
 		});
 	},
 
 
+	activate: function() {
+		this.widget.slideToggle();
+	},
 
-	send: function(e) {
-		e.preventDefault();
+
+
+	save: function() {
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxdata.ajaxurl,
 			data: {
 				action: 'addGallery',
-				name: this.newGalleryName.val(),
-				description: this.newGalleryDescription.val()
+				name: this.nameInput.val(),
+				description: this.descriptionInput.val()
 			},
 			
 			success: function(data){
@@ -48,9 +52,9 @@ var NewGalleryWidget = {
 
 
 	cancel: function() {
-		this.newGalleryName.val("");
-		this.newGalleryDescription.val("");
-		this.newGallery.slideToggle();
+		this.nameInput.val("");
+		this.descriptionInput.val("");
+		this.widget.slideToggle();
 	}
 };
 
@@ -89,6 +93,7 @@ var EditGalleryWidget = {
 			EditGalleryWidget.galleryData.title_image_url = gallery.find('img').attr("src");
 
 			EditGalleryWidget.activate();
+			ImageSelectionWidget.activate( EditGalleryWidget.galleryData.id );
 		});
 
 		this.bindActions();
@@ -192,9 +197,9 @@ var EditGalleryWidget = {
 
 var ImageSelectionWidget = {
 
-	widget: jQuery('#imageSelection'),
-	headline: jQuery('#imageSelection h3'),
-	imageContainer: jQuery('#imageSelection .imageContainer'),
+	widget: jQuery('#imageSelectionWidget'),
+	galleryImagesContainer: jQuery('#imageSelectionWidget .galleryImagesContainer'),
+	allImagesContainer: jQuery('#imageSelectionWidget .allImagesContainer'),
 
 	galleryData: {
 		id: null,
@@ -207,77 +212,66 @@ var ImageSelectionWidget = {
 
 
 	init: function() {
-		jQuery('.galleryEditors').on('click', '.galleryEditor [name=images]', function() {
-						
-			ImageSelectionWidget.cancel();
-			var gallery = jQuery(this).parent();
+		ImageSelectionWidget.galleryImagesContainer.sortable();
 
-			ImageSelectionWidget.galleryData.id = gallery.attr('data-id');
-			ImageSelectionWidget.galleryData.title = gallery.find( 'h3' ).text().trim();
-			ImageSelectionWidget.galleryData.description = gallery.find( 'p' ).text().trim();
-			ImageSelectionWidget.galleryData.title_image_url = gallery.find('img').attr("src");
+		
 
-			ImageSelectionWidget.activate();
-		});
-
-
-		this.bindActions();
-
-	},
-
-
-	bindActions: function() {
-		this.widget.find('[name=cancel]').on('click', function() {
-			ImageSelectionWidget.cancel();
-		});
-
-		this.widget.find('[name=save]').on('click', function() {
-			ImageSelectionWidget.save();
-		});
-
-		this.widget.find('[name=delete]').on('click', function() {
-			ImageSelectionWidget.deleteSelected();
-		});
-
-		this.widget.on('click', '.imageEditor', function() {
-			ImageSelectionWidget.toggleSave(this);
+		ImageSelectionWidget.allImagesContainer.droppable({
+			drop: function(e, ui) {
+				if ( jQuery( ui.draggable ).parent().hasClass( 'galleryImagesContainer' ) )  {
+					jQuery( ui.draggable ).remove(); 
+		    	}
+			}
 		});
 	},
 
 
-	activate: function() {
-		this.headline.html(this.galleryData.title);
-		this.loadImages();
+	activate: function( galleryID ) {
+		this.widget.show(400);
+		this.loadGalleryImages( galleryID );
+		this.loadAllImages();
 
-		this.imageContainer.sortable({
-			items: '.imageEditor'
+		ImageSelectionWidget.allImagesContainer.find('.imageEditor').draggable({
+			connectToSortable: '.galleryImagesContainer',
+			helper: 'clone'
 		});
 	},
 
 
 
-	loadImages: function() {
+	loadGalleryImages: function( galleryID ) {
 		jQuery.ajax({
 			type: "POST",
 			url: ajaxdata.ajaxurl,
 
 			data: {
 				action: 'getGalleryImages',
-				id: this.galleryData.id
+				id: galleryID
 			},
 
 
 			success: function(data) {
-				ImageSelectionWidget.imageContainer.append(data);
-				ImageSelectionWidget.widget.show(400);
+				ImageSelectionWidget.galleryImagesContainer.append(data);
 			}
 
 		});
 	},
 
+	loadAllImages: function() {
+		jQuery.ajax({
+			type: "POST",
+			url: ajaxdata.ajaxurl,
 
-	toggleSave: function(element) {
-		jQuery(element).toggleClass('addToGallery');
+			data: {
+				action: 'getAllImages',
+			},
+
+
+			success: function(data) {
+				ImageSelectionWidget.allImagesContainer.append(data);
+			}
+
+		});
 	},
 
 
@@ -304,41 +298,6 @@ var ImageSelectionWidget = {
 			}
 		});
 	},
-
-
-	deleteSelected: function() {
-		if ( confirm( "All selected images will be deleted from this gallery. This can not be undone. Continue?" ) ) {
-			var imagesToAdd = [];
-
-			this.imageContainer.find('.addToGallery').each(function() {
-				imagesToAdd.push(jQuery(this).attr('data-id'));
-				jQuery(this).remove();
-			});
-
-
-			jQuery.ajax({
-				method: 'POST',
-				url: ajaxdata.ajaxurl,
-
-				data: {
-					action: 'deleteRelationship',
-					imageIds: imagesToAdd,
-					galleryId: this.galleryData.id
-				}
-			});
-		}
-	},
-
-
-	cancel: function () {
-		jQuery.each(this.galleryData, function(key, value) {
-			value = null;
-		});
-
-		this.widget.hide(400);
-		this.imageContainer.html("");
-	}
-
 };
 
 NewGalleryWidget.init();

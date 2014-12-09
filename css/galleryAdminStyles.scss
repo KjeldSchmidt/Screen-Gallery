@@ -34,6 +34,21 @@
 	height: 100px;
 }
 
+#imageSelectionWidget > div {
+	width: 49%;
+	border: 1px solid black;
+	min-height: 400px;
+}
+
+	.galleryImagesContainer {
+		float: left;
+	}
+
+	.allImagesContainer {
+		float: right;
+	}
+
+
 
 .imageEditor {
 

@@ -3,7 +3,9 @@
 
 
 
-
+<!--
+Is shown when #addGalleryButton is pressed.
+-->
 <div id="addGallery" class="hiddenWidget editingWidget">
 	<input type="text" placeholder="Name" name="name">
 	<textarea name="description" cols="30" rows="5" placeholder="Description"></textarea>
@@ -16,44 +18,45 @@
 
 
 
-
+<!--
+Is shown when a galleries edit-button is pressed.
+Name and description are automatically filled, all images assigned to the gallery are shown in .imageContainer
+-->
 <div id="editGallery" class="hiddenWidget editingWidget">
-	<img src="" alt="">
-	<input type="text" placeholder="Name" name="name">
-	<textarea name="description" cols="30" rows="5" placeholder="Description"></textarea>
 	<span>
 		<button type="submit" class="button button-primary button-large">Save</button>
 		<button class="button button-secondary button-large" name="cancel">Cancel</button>
 		<button class="button button-secondary button-large" name="delete">Delete</button>
 	</span>
+
+
+	<img src="" alt="">
+	<input type="text" placeholder="Name" name="name">
+	<textarea name="description" cols="30" rows="5" placeholder="Description"></textarea>
 </div>
 
 
 
 
 
-<div id="imageSelection" class="hiddenWidget">
-	<h3></h3>
-	
-	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="cancel" class="button button-secondary button-large">Cancel</button>
-	
-
-	<div class="deletedImages imageDropArea">
+<!--
+Gets inserted into both addGallery and editGallery
+-->
+<div id="imageSelectionWidget" class="hiddenWidget">
+	<h3>
+		Drang and drop images to create your gallery!
+	</h3>
+	<div class="galleryImagesContainer">
 		<h3>
-			Delete Images
+			This is your gallery.
 		</h3>
-		<p class="description">
-			Drop images here to be deleted from the gallery.
-		</p>
 	</div>
-	<div class="imageContainer">
 
+	<div class="allImagesContainer">
+		<h3>
+			All images.
+		</h3>
 	</div>
-	
-	
-	<button name="save" class="button button-primary button-large">Save</button>
-	<button name="cancel" class="button button-secondary button-large">Cancel</button>
 </div>
 
 

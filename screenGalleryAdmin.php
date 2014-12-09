@@ -30,7 +30,7 @@ wp_register_style('screenGalleryAdminStyle', plugins_url('css/galleryAdminStyles
 wp_enqueue_style('screenGalleryAdminStyle');
 	
 
-wp_register_script('galleryAdminScript', plugins_url('js/galleryAdminScript.js',  __FILE__));
+wp_register_script('galleryAdminScript', plugins_url('js/galleryAdminScript.js',  __FILE__), array( 'jquery-ui-draggable', 'jquery-ui-sortable', 'jquery-ui-droppable' ));
 wp_enqueue_script('galleryAdminScript');
 wp_localize_script('galleryAdminScript', 'ajaxdata', array('ajaxurl' => admin_url('admin-ajax.php')));
 

@@ -214,8 +214,6 @@ var ImageSelectionWidget = {
 	init: function() {
 		ImageSelectionWidget.galleryImagesContainer.sortable();
 
-		
-
 		ImageSelectionWidget.allImagesContainer.droppable({
 			drop: function(e, ui) {
 				if ( jQuery( ui.draggable ).parent().hasClass( 'galleryImagesContainer' ) )  {
@@ -231,10 +229,7 @@ var ImageSelectionWidget = {
 		this.loadGalleryImages( galleryID );
 		this.loadAllImages();
 
-		ImageSelectionWidget.allImagesContainer.find('.imageEditor').draggable({
-			connectToSortable: '.galleryImagesContainer',
-			helper: 'clone'
-		});
+		console.dir(ImageSelectionWidget.allImagesContainer.find('.imageEditor'));
 	},
 
 
@@ -269,6 +264,12 @@ var ImageSelectionWidget = {
 
 			success: function(data) {
 				ImageSelectionWidget.allImagesContainer.append(data);
+
+				ImageSelectionWidget.allImagesContainer.find('.imageEditor').draggable({
+					connectToSortable: '.galleryImagesContainer',
+					helper: 'clone'
+				});
+
 			}
 
 		});

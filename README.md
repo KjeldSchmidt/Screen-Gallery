@@ -1,7 +1,7 @@
 Screen-Gallery
 ==============
 
-A full screen, responsive, endless scrolling gallery plugin for wordpress.
+A full screen, responsive, endless scrolling gallery plugin for wordpress. Not currently under development and not recommended for production use. Feel free to use it in any way you like. Probably GPL or CC0 or something.
 
 Already functional:
 	→Endless scrolling
